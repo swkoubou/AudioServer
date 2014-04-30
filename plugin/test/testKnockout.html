@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
+    <title>testKnockout</title>
+</head>
+<body>
+
+<div data-bind="foreach: ary()">
+    <p data-bind="text: $data"></p>
+</div>
+
+<!-- JavaScript -->
+<script src="../jquery-1.10.2.min.js"></script>
+<script src="../knockout/knockout-3.0.0.js"></script>
+<script src="../underscore-min.js"></script>
+<script>
+    $(function () {
+        var obj = {a: 1, b: 2, c: 3};
+        var vm = {};
+
+        vm.obj = ko.observable(obj);
+        vm.func = ko.computed(function () {
+            console.log(vm.obj());
+        });
+        vm.ary = ko.computed(function () {
+            return _.values(vm.obj());
+        });
+
+        ko.applyBindings(vm);
+
+        vm.obj(obj);
+
+        console.log(vm.ary());
+
+        vm.obj().d = 4;
+
+    });
+</script>
+</body>
+</html>
