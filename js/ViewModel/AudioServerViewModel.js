@@ -244,7 +244,7 @@ $(function () {
         that.changeVolume = function () {
             that.isLoading(true);
 
-            console.log(statusModel.data.volume());
+            statusModel.data.volume($(".music-volume").val());
 
             statusModel.change("volume", statusModel.data.volume(), {
                 success: function () {
