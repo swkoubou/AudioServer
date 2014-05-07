@@ -326,13 +326,15 @@ $(function () {
                 return;
             }
 
-            o.message = _.isFunction(o.message) ? o.message() : o.message;
-
             obj = _.defaults(o || {}, {
                 title: "",
                 message: "",
                 isSuccess: false
             });
+
+            if (_.isFunction(obj.message)) {
+                obj.message = obj.message();
+            }
 
             that.alerts.unshift(obj);
 
