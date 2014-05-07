@@ -326,6 +326,8 @@ $(function () {
                 return;
             }
 
+            o.message = _.isFunction(o.message) ? o.message() : o.message;
+
             obj = _.defaults(o || {}, {
                 title: "",
                 message: "",
