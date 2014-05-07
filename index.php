@@ -87,7 +87,7 @@
                         </button>
 
                         <!-- volume -->
-                        <div class="col-xs-12 col-sm-3 range">
+                        <div class="col-xs-12 range">
                             <label class="sr-only" for="volume">volume</label>
                             <input id="volume" type="range" min=0, max=100, step=1 class="music-volume"
                                    data-bind="value: status.volume, event: { mouseup: changeVolume, touchend: changeVolume }"
@@ -95,33 +95,33 @@
                         </div>
 
                         <!-- new playlist -->
-                        <button type="button" class="btn col-xs-4 visible-xs btn-default"
+                        <button type="button" class="btn col-xs-4 btn-default"
                                 data-placement="bottom" title="New Playlist" data-toggle="modal" data-target="#newPlaylistModal">
                             <span class="glyphicon glyphicon-music"></span>
                         </button>
 
                         <!-- delete playlist -->
-                        <button type="button" class="btn col-xs-4 visible-xs btn-default"
+                        <button type="button" class="btn col-xs-4 btn-default"
                                 data-placement="bottom" title="Delete Playlist" data-toggle="modal" data-target="#deletePlaylistModal">
                             <span class="glyphicon glyphicon-trash"></span>
                         </button>
 
                         <!-- add music to playlist -->
-                        <button type="button" class="btn col-xs-4 visible-xs btn-default"
+                        <button type="button" class="btn col-xs-4 btn-default"
                                 data-placement="bottom" title="Add Music" data-toggle="modal" data-target="#addMusicTo"
                                 data-bind="enable: checkCurrentMusics().length > 0">
                             <span class="glyphicon glyphicon-plus"></span>
                         </button>
 
                         <!-- remove music from playlist -->
-                        <button type="button" class="btn col-xs-4 visible-xs btn-default"
+                        <button type="button" class="btn col-xs-4 btn-default"
                                 data-placement="bottom" title="Remove Music" data-toggle="modal" data-target="#removeMusicFrom"
                                 data-bind="enable: checkCurrentMusics().length > 0">
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
 
                         <!-- upload new music -->
-                        <button type="button" class="btn col-xs-4 visible-xs btn-default"
+                        <button type="button" class="btn col-xs-4 btn-default"
                                 data-placement="bottom" title="Upload" data-toggle="modal" data-target="#uploadMusic">
                             <span class="glyphicon glyphicon-open"></span>
                         </button>
@@ -136,42 +136,6 @@
         <div class="row">
             <!-- sidebar  -->
             <div class="col-sm-3 col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
-                    <li>
-                        <!-- new playlist -->
-                        <button type="button" class="btn btn-default"
-                                data-placement="bottom" title="New Playlist" data-toggle="modal" data-target="#newPlaylistModal">
-                            <span class="glyphicon glyphicon-music"></span>
-                        </button>
-
-                        <!-- delete playlist -->
-                        <button type="button" class="btn btn-default"
-                                data-placement="bottom" title="Delete Playlist" data-toggle="modal" data-target="#deletePlaylistModal">
-                            <span class="glyphicon glyphicon-trash"></span>
-                        </button>
-
-                        <!-- add music to playlist -->
-                        <button type="button" class="btn btn-default"
-                                data-placement="bottom" title="Add Music" data-toggle="modal" data-target="#addMusicTo"
-                                data-bind="enable: checkCurrentMusics().length > 0">
-                            <span class="glyphicon glyphicon-plus"></span>
-                        </button>
-
-                        <!-- remove music from playlist -->
-                        <button type="button" class="btn btn-default"
-                                data-placement="bottom" title="Remove Music" data-toggle="modal" data-target="#removeMusicFrom"
-                                data-bind="enable: checkCurrentMusics().length > 0">
-                            <span class="glyphicon glyphicon-minus"></span>
-                        </button>
-
-                        <!-- upload new music -->
-                        <button type="button" class="btn btn-default"
-                                data-placement="bottom" title="Upload" data-toggle="modal" data-target="#uploadMusic">
-                            <span class="glyphicon glyphicon-open"></span>
-                        </button>
-                    </li>
-                </ul>
-
                 <!-- playlist -->
                 <ul class="nav nav-sidebar current">
                     <li class="active" data-bind="css { active: currentPlaylist() == nowPlaylist() }">

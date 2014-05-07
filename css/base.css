@@ -91,18 +91,6 @@ body {
     margin-bottom: 5px;
 }
 
-@media (min-width: 768px) {
-    .navbar-nav .btn {
-        width: 40px;
-        margin-right: 2px;
-        margin-left: 2px;
-    }
-
-    .navbar-nav .range {
-        margin-top: 7px;
-    }
-}
-
 .musics td {
     cursor: pointer;
 }
