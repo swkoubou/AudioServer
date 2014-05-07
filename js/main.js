@@ -71,12 +71,16 @@ $(function () {
                 },
                 playSuccess: {
                     title: "Success!",
-                    message: statusModel.data.isPlay() ? "再生しました。" : "停止しました",
+                    message: function () {
+                        return statusModel.data.isPlay() ? "再生しました。" : "停止しました";
+                    },
                     isSuccess: true
                 },
                 playError: {
                     title: "Error...",
-                    message: statusModel.data.isPlay() ? "停止に失敗しました。" : "再生に失敗しました。",
+                    message: function () {
+                        return statusModel.data.isPlay() ? "停止に失敗しました。" : "再生に失敗しました。";
+                    },
                     isSuccess: false
                 },
                 changeVolumeSuccess: {
@@ -91,22 +95,30 @@ $(function () {
                 },
                 repeatSuccess: {
                     title: "Success!",
-                    message: statusModel.data.isRepeat() ? "リピートモードを有効にしました。" : "リピートモードを解除しました。",
+                    message: function () {
+                        return statusModel.data.isRepeat() ? "リピートモードを有効にしました。" : "リピートモードを解除しました。";
+                    },
                     isSuccess: true
                 },
                 repeatError: {
                     title: "Error...",
-                    message: statusModel.data.isRepeat() ? "リピートモードの解除に失敗しました。" : "リピートモードの有効化に失敗しました。",
+                    message: function () {
+                        return statusModel.data.isRepeat() ? "リピートモードの解除に失敗しました。" : "リピートモードの有効化に失敗しました。";
+                    },
                     isSuccess: false
                 },
                 randomSuccess: {
                     title: "Success!",
-                    message: statusModel.data.isRandom() ? "ランダムモードを有効にしました。" : "ランダムモードを解除しました。",
+                    message: function () {
+                        return statusModel.data.isRandom() ? "ランダムモードを有効にしました。" : "ランダムモードを解除しました。";
+                    },
                     isSuccess: true
                 },
                 randomError: {
                     title: "Error...",
-                    message: statusModel.data.isRepeat() ? "ランダムモードの解除に失敗しました。" : "ランダムモードの有効化に失敗しました。",
+                    message: function () {
+                        return statusModel.data.isRepeat() ? "ランダムモードの解除に失敗しました。" : "ランダムモードの有効化に失敗しました。";
+                    },
                     isSuccess: false
                 },
                 createPlaylistSuccess: {
@@ -121,12 +133,16 @@ $(function () {
                 },
                 uploadMusicSuccess: {
                     title: "Success!",
-                    message: "uploaded " + vm.uploadFileName(),
+                    message: function () {
+                        return "uploaded " + vm.uploadFileName()
+                    },
                     isSuccess: true
                 },
                 uploadMusicError: {
                     title: "Error...",
-                    message: "cannot uploaded " + vm.uploadFileName() + " so cancel upload.",
+                    message: function () {
+                        return "cannot uploaded " + vm.uploadFileName() + " so cancel upload."
+                    },
                     isSuccess: false
                 },
                 addMusicToPlaylistSuccess: {
