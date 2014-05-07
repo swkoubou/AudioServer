@@ -121,12 +121,12 @@ $(function () {
                 },
                 uploadMusicSuccess: {
                     title: "Success!",
-                    message: "uploaded ",
+                    message: "uploaded " + vm.uploadFileName(),
                     isSuccess: true
                 },
                 uploadMusicError: {
                     title: "Error...",
-                    message: "cannot uploaded ",
+                    message: "cannot uploaded " + vm.uploadFileName() + " so cancel upload.",
                     isSuccess: false
                 },
                 addMusicToPlaylistSuccess: {

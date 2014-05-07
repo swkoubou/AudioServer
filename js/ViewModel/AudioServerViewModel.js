@@ -432,7 +432,8 @@ $(function () {
 
             fd.append("name", that.userName());
 
-            _.each(files, function (file) {
+            (function loop (idx) {
+                var file = files[idx];
                 that.uploadFileName(file.name);
                 fd.append("file", file);
 
@@ -442,15 +443,20 @@ $(function () {
                     data: fd,
                     success: function () {
                         that.alert(options.alerts.uploadMusicSuccess);
-                        done();
+                        if (idx + 1 === files.length) {
+                            done();
+                        }else {
+                            loop(idx + 1);
+                        }
                     },
                     error: function (xhr, thrown, status) {
-			console.log(xhr, thrown, status);
+			            console.log(xhr, thrown, status);
                         that.alert(options.alerts.uploadMusicError);
                         done();
                     }
                 });
-            });
+
+            }(0));
         };
 
         // イベントキャンセル
