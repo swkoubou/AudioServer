@@ -326,7 +326,7 @@ $(function () {
                 return;
             }
 
-            obj = _.defaults(o || {}, {
+            obj = _.defaults(_.clone(o) || {}, {
                 title: "",
                 message: "",
                 isSuccess: false

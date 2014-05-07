@@ -72,14 +72,14 @@ $(function () {
                 playSuccess: {
                     title: "Success!",
                     message: function () {
-                        return statusModel.data.isPlay() ? "再生しました。" : "停止しました";
+                        return statusModel.data.isPlay() ? "停止しました" : "再生しました。";
                     },
                     isSuccess: true
                 },
                 playError: {
                     title: "Error...",
                     message: function () {
-                        return statusModel.data.isPlay() ? "停止に失敗しました。" : "再生に失敗しました。";
+                        return statusModel.data.isPlay() ? "再生に失敗しました。" : "停止に失敗しました。";
                     },
                     isSuccess: false
                 },
@@ -96,28 +96,28 @@ $(function () {
                 repeatSuccess: {
                     title: "Success!",
                     message: function () {
-                        return statusModel.data.isRepeat() ? "リピートモードを有効にしました。" : "リピートモードを解除しました。";
+                        return statusModel.data.isRepeat() ? "リピートモードを解除しました。" : "リピートモードを有効にしました。" ;
                     },
                     isSuccess: true
                 },
                 repeatError: {
                     title: "Error...",
                     message: function () {
-                        return statusModel.data.isRepeat() ? "リピートモードの解除に失敗しました。" : "リピートモードの有効化に失敗しました。";
+                        return statusModel.data.isRepeat() ? "リピートモードの有効化に失敗しました。" : "リピートモードの解除に失敗しました。";
                     },
                     isSuccess: false
                 },
                 randomSuccess: {
                     title: "Success!",
                     message: function () {
-                        return statusModel.data.isRandom() ? "ランダムモードを有効にしました。" : "ランダムモードを解除しました。";
+                        return statusModel.data.isRandom() ? "ランダムモードを解除しました。" : "ランダムモードを有効にしました。";
                     },
                     isSuccess: true
                 },
                 randomError: {
                     title: "Error...",
                     message: function () {
-                        return statusModel.data.isRepeat() ? "ランダムモードの解除に失敗しました。" : "ランダムモードの有効化に失敗しました。";
+                        return statusModel.data.isRepeat() ? "ランダムモードの有効化に失敗しました。" : "ランダムモードの解除に失敗しました。";
                     },
                     isSuccess: false
                 },
