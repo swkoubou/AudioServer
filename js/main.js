@@ -85,12 +85,16 @@ $(function () {
                 },
                 changeVolumeSuccess: {
                     title: "Success!",
-                    message: "音量を変更しました。",
+                    message: function () {
+                        return "音量を変更しました。(" + statusModel.data.volume() + ")";
+                    },
                     isSuccess: true
                 },
                 changeVolumeError: {
                     title: "Error...",
-                    message: "音量を変更できませんでした。",
+                    message: function () {
+                        return "音量を変更できませんでした。(" + statusModel.data.volume() + ")";
+                    },
                     isSuccess: false
                 },
                 repeatSuccess: {
