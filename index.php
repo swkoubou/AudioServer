@@ -115,14 +115,14 @@
 
                         <!-- remove music from playlist -->
                         <button type="button" class="btn col-xs-4 btn-default"
-                                data-placement="bottom" title="Remove Music" data-toggle="modal" data-target="#removeMusicFrom"
+                                data-placement="top" title="Remove Music" data-toggle="modal" data-target="#removeMusicFrom"
                                 data-bind="enable: checkCurrentMusics().length > 0">
                             <span class="glyphicon glyphicon-minus"></span>
                         </button>
 
                         <!-- upload new music -->
                         <button type="button" class="btn col-xs-4 btn-default"
-                                data-placement="bottom" title="Upload" data-toggle="modal" data-target="#uploadMusic">
+                                data-placement="top" title="Upload" data-toggle="modal" data-target="#uploadMusic">
                             <span class="glyphicon glyphicon-open"></span>
                         </button>
                     </li>
