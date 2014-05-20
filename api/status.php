@@ -69,6 +69,12 @@
 				exec("mpc random off");
 			}
 			break;
+		case "prev":
+			exec("mpc next");
+ 			break;
+		case "next":
+			exec("mpc next");
+			break;
 	}
 	$output_data["Code"] = 0;
 	$output_data["Result"] = "Success";
