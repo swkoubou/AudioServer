@@ -58,7 +58,7 @@
 
                         <!-- step -->
                         <button class="btn btn-default col-xs-4 text-btn" data-bind="click: stepBack"
-                                data-toggle="tooltip" data-placement="bottom" title="Next">
+                                data-toggle="tooltip" data-placement="bottom" title="Prev">
                             <span class="glyphicon glyphicon-step-backward"></span>
                         </button>
                         <button class="btn btn-default col-xs-4 text-btn" data-bind="click: stepForward"

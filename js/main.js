@@ -37,8 +37,8 @@ $(function () {
         } : {
             updateUrl: "api/status.php",
             changeUrl: "api/status.php",
-            stepForwardUrl: "api/stepforward.php",
-            stepBackUrl: "api/stepback.php",
+            stepForwardUrl: "api/status.php",
+            stepBackUrl: "api/status.php",
             selectUrl: "api/selectmusic.php"
         }), userModel = new model.UserModel(test ? {
             updateUrl: "stub/user.php"
