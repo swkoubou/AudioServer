@@ -75,6 +75,7 @@ $(function () {
                     type: that.options.stepForwardType,
                     url: that.options.stepForwardUrl,
                     dataType: "json",
+                    data: { type: "next" },
                     success: o.success || null,
                     error: o.error || null
                 });
@@ -87,6 +88,7 @@ $(function () {
                     type: that.options.stepBackType,
                     url: that.options.stepBackUrl,
                     dataType: "json",
+                    data: { type: "prev" },
                     success: o.success || null,
                     error: o.error || null
                 });
