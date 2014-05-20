@@ -70,7 +70,7 @@
 			}
 			break;
 		case "prev":
-			exec("mpc next");
+			exec("mpc prev");
  			break;
 		case "next":
 			exec("mpc next");
