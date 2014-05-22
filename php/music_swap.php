@@ -37,14 +37,14 @@ function music_swap($music_id1, $music_id2, $db = null, $transaction = true) {
 }
 
 function music_sort($start, $end, $db = null) {
-	try {
-		$stmt = $db->execute($db, "select id, name from music where id >= ? and id <= ?", [$start, $end]);
-	} catch (Exception $e) {
-		throw new Exception($e);
-	}
-
 	if ($db === null) {
 		$db = new DB();
+	}
+
+	try {
+		$stmt = $db->execute($db, "select id, name from music where id >= ? and id <= ? order by id", [$start, $end]);
+	} catch (Exception $e) {
+		throw new Exception($e);
 	}
 
 	$N = $stmt->rowCount();
@@ -53,10 +53,11 @@ function music_sort($start, $end, $db = null) {
 	$db->db->beginTransaction();
 	try {
 		for ($i = 0; $i < $N; $i++) {
-			for ($j = i + 1; $j <= $N; $j++) {
+			for ($j = $i + 1; $j < $N; $j++) {
 				if ($musics[$i]["name"] > $musics[$j]["name"]) {
 					music_swap($musics[$i]["id"], $musics[$j]["id"], $db, false);
-					list($musics[$i], $musics[$j]) = array($musics[$j], $musics[$i]);
+					list($musics[$i]["name"], $musics[$j]["name"]) =
+						array($musics[$j]["name"], $musics[$i]["name"]);
 				}
 			}
 		}
