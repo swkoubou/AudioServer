@@ -2,9 +2,13 @@
 
 require_once "db.php";
 
-function music_swap($music_id1, $music_id2, $db, $transaction = true) {
+function music_swap($music_id1, $music_id2, $db = null, $transaction = true) {
 	if (!is_numeric($music_id1) || !is_numeric($music_id2)) {
 		throw new InvalidArgumentException("arg1 and arg2 is must be numeric.");
+	}
+
+	if ($db === null) {
+		$db = new DB();
 	}
 
 	$temp_music_id1 = 1000000;
@@ -32,11 +36,15 @@ function music_swap($music_id1, $music_id2, $db, $transaction = true) {
 	}
 }
 
-function music_sort($start, $end, $db) {
+function music_sort($start, $end, $db = null) {
 	try {
 		$stmt = $db->execute($db, "select id, name from music where id >= ? and id <= ?", [$start, $end]);
 	} catch (Exception $e) {
 		throw new Exception($e);
+	}
+
+	if ($db === null) {
+		$db = new DB();
 	}
 
 	$N = $stmt->rowCount();
