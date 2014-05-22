@@ -37,6 +37,7 @@ function music_swap($music_id1, $music_id2, $db = null, $transaction = true) {
 }
 
 function music_sort($start, $end, $db = null) {
+<<<<<<< HEAD
 	if ($db === null) {
 		$db = new DB();
 	}
