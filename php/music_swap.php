@@ -15,7 +15,7 @@ function music_swap($music_id1, $music_id2, $db, $transaction = true) {
 			$db->db->beginTransaction();
 		}
 
-		$stmt = $dbexecute($db, "update music set id = ? where id = ?", [$temp_music_id1, $music_id1]);
+		$stmt = $db->execute($db, "update music set id = ? where id = ?", [$temp_music_id1, $music_id1]);
 		$stmt = $db->execute($db, "update music set id = ? where id = ?", [$temp_music_id2, $music_id2]);
 		$stmt = $db->execute($db, "update music set id = ? where id = ?", [$music_id1, $temp_music_id2]);
 		$stmt = $db->execute($db, "update music set id = ? where id = ?", [$music_id2, $temp_music_id1]);
@@ -30,4 +30,32 @@ function music_swap($music_id1, $music_id2, $db, $transaction = true) {
 	if ($transaction) {
 		$db->db->commit();
 	}
+}
+
+function music_sort($start, $end, $db) {
+	try {
+		$stmt = $db->execute($db, "select id, name from music where id >= ? and id <= ?", [$start, $end]);
+	} catch (Exception $e) {
+		throw new Exception($e);
+	}
+
+	$N = $stmt->rowCount();
+	$musics = $stmt->fetchAll();
+
+	$db->db->beginTransaction();
+	try {
+		for ($i = 0; $i < $N; $i++) {
+			for ($j = i + 1; $j <= $N; $j++) {
+				if ($musics[$i]["name"] > $musics[$j]["name"]) {
+					music_swap($musics[$i]["id"], $musics[$j]["id"], $db, false);
+					list($musics[$i], $musics[$j]) = array($musics[$j], $musics[$i]);
+				}
+			}
+		}
+	} catch (Exception $e) {
+		$db->db->rollBack();
+		throw new Exception($e);
+	}
+
+	$db->db->commit();
 }
