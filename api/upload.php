@@ -22,10 +22,11 @@
 		$file_name2 .= $file_name2_split[$i];
 	}
 	
-	// mp3かwavじゃなかったらアップロード不可にする
+	// {mp3|wma|wav|flac}じゃなかったらアップロード不可にする
 	$code++;
-	if($file_name2_split[count($file_name2_split)-1] != "mp3" && $file_name2_split[count($file_name2_split)-1] != "wav" && $file_name2_split[count($file_name2_split)-1] != "wma"){
-		$output = array('Code' => $code, 'Error' => 'Please upload the file format of wav or mp3 format or wma format. ');
+        $file_type = $file_name2_split[count($file_name2_split)-1];
+        if ($file_type != "mp3" && $file_type != "wav" && $file_type != "wma" && $file_type != "flac") {
+		$output = array('Code' => $code, 'Error' => 'Please upload the file format {mp3|wma|wav|flac}. ');
 		json_output($output, 400);
 	}
 	
