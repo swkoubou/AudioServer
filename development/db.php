@@ -1,8 +1,8 @@
 <?php
-	$host = "localhost";
-	$user = "pi";
-	$password = "raspberry";
-	$database = "musicdb";
+	$host = "";
+	$user = "";
+	$password = "";
+	$database = "";
 	
 	$db = mysqli_connect($host, $user, $password, $database);
 	$stmt = mysqli_prepare($db, "SET NAMES utf8");
