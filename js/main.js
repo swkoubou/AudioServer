@@ -5,44 +5,24 @@ $(function () {
 
     var model = util.namespace("swkoubou.audioserver.model"),
         viewmodel = util.namespace("swkoubou.audioserver.viewmodel"),
-        test = false,
-        musicModel = new model.MusicModel(test ? {
-            updateUrl: "stub/music.php",
-            uploadUrl: "stub/music.php",
-            removeUrl: "stub/music.php"
-        } : {
+        musicModel = new model.MusicModel({
             updateUrl: "api/musiclist.php",
             uploadUrl: "api/upload.php",
             removeUrl: "stub/music.php"
-        }), playlistModel = new model.PlaylistModel(test ? {
-            updateUrl: "stub/playlist.php",
-            createUrl: "stub/playlist.php",
-            removeUrl: "stub/playlist.php",
-            currentRemoveUrl: "stub/playlist.php",
-            addMusicUrl: "stub/playlist/music.php",
-            removeMusicUrl: "stub/playlist/music.php"
-        } : {
+        }), playlistModel = new model.PlaylistModel({
             updateUrl: "api/playlist.php",
             createUrl: "api/playlist.php",
             removeUrl: "api/playlistdelete.php",
             currentClearUrl: "api/currentclear.php",
             addMusicUrl: "api/playlistmusicadd.php",
             removeMusicUrl: "api/playlistmusicdelete.php"
-        }), statusModel = new model.StatusModel(test ? {
-            updateUrl: "stub/status.php",
-            changeUrl: "stub/status.php",
-            stepForwardUrl: "stub/status.php",
-            stepBackUrl: "stub/status.php",
-            selectUrl: "stub/status.php"
-        } : {
+        }), statusModel = new model.StatusModel({
             updateUrl: "api/status.php",
             changeUrl: "api/status.php",
             stepForwardUrl: "api/status.php",
             stepBackUrl: "api/status.php",
             selectUrl: "api/selectmusic.php"
-        }), userModel = new model.UserModel(test ? {
-            updateUrl: "stub/user.php"
-        } : {
+        }), userModel = new model.UserModel({
             updateUrl: "api/user.php"
         }), vm = new viewmodel.AudioServerViewModel({
             musicModel: musicModel,
