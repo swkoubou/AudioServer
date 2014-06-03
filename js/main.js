@@ -5,6 +5,7 @@ $(function () {
 
     var model = util.namespace("swkoubou.audioserver.model"),
         viewmodel = util.namespace("swkoubou.audioserver.viewmodel"),
+        test = true,
         musicModel = new model.MusicModel({
             updateUrl: "api/musiclist.php",
             uploadUrl: "api/upload.php",
@@ -20,7 +21,7 @@ $(function () {
             updateUrl: "api/status.php",
             changeUrl: "api/status.php",
             stepForwardUrl: "api/status.php",
-            stepBackUrl: "api/status.php",
+            stepBackUrl: test ? "api/status.php" : "api/status.php",
             selectUrl: "api/selectmusic.php"
         }), userModel = new model.UserModel({
             updateUrl: "api/user.php"

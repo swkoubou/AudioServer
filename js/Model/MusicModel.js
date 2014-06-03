@@ -13,8 +13,8 @@ $(function () {
             removeType: "DELETE"
         };
 
-    ns.MusicModel = function (o) {
-        var that = this.
+    ns.MusicModel = function MusicModel(o) {
+        var that = this,
             options = _.defaults(o || {}, defaultOptions);
 
         that.data = ko.observable({});
@@ -23,8 +23,8 @@ $(function () {
             o = o || {};
 
             $.ajax({
-                type: that.options.updateType,
-                url: that.options.updateUrl,
+                type: options.updateType,
+                url: options.updateUrl,
                 dataType: "json",
                 success: function (data, status, xhr) {
                     _.each(data, function (x) {
@@ -64,8 +64,8 @@ $(function () {
             o = o || {};
 
             $.ajax({
-                type: that.options.uploadType,
-                url: that.options.uploadUrl,
+                type: options.uploadType,
+                url: options.uploadUrl,
                 data: o.data || null,
                 dataType: "json",
                 processData: false,
@@ -79,13 +79,15 @@ $(function () {
             o = o || {};
 
             $.ajax({
-                type: that.options.removeType,
-                url: that.options.removeUrl,
+                type: options.removeType,
+                url: options.removeUrl,
                 data: o.data || null,
                 dataType: "json",
                 success: o.success || null,
                 error: o.error || null
             });
         };
+
+        return that;
     };
 });
