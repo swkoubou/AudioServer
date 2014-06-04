@@ -7,7 +7,6 @@
 	$music_id = 0;
 	if(!$proc || $proc == "" || $proc == null){
 		exec("mpc status",$op);
-        $op = ["volume: 83%   repeat: on    random: on    single: off   consume: off"];
 		if(count($op)==1){
 			$isPlay = "false";
 			$statusstr = $op[0];

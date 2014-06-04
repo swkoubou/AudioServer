@@ -18,10 +18,10 @@ $(function () {
             addMusicUrl: "api/playlistmusicadd.php",
             removeMusicUrl: "api/playlistmusicdelete.php"
         }), statusModel = new model.StatusModel({
-            updateUrl: "api/status.php",
-            changeUrl: "api/status.php",
-            stepForwardUrl: "api/status.php",
-            stepBackUrl: test ? "api/status.php" : "api/status.php",
+            updateUrl: test ? "stub/status.php" : "api/status.php",
+            changeUrl: test ? "stub/status.php" : "api/status.php",
+            stepForwardUrl: test ? "stub/status.php" : "api/status.php",
+            stepBackUrl: test ? "stub/status.php" : "api/status.php",
             selectUrl: "api/selectmusic.php"
         }), userModel = new model.UserModel({
             updateUrl: "api/user.php"
@@ -206,15 +206,12 @@ $(function () {
         initWait = 3000,
         update = function () {
             setTimeout(function () {
-                vm.update({
-                    success: update,
-                    error: update
-                })
+                vm.update().always(update);
             }, waitUpdate);
         },
         init = function () {
-            vm.update({
-                success: function () {
+            vm.update()
+                .done(function () {
                     // 再生プレイリストをカレントプレイリストにする
                     vm.currentPlaylist(vm.playlists()[0]);
                     // ローディングテキストのクリア
@@ -225,12 +222,11 @@ $(function () {
                     ko.applyBindings(vm);
                     // 移行
                     update();
-                },
-                error: function () {
+                })
+                .fail(function () {
                     $(".loading-text").html("<p>読み込みに失敗しています...</p>");
                     setTimeout(init, initWait);
-                }
-            });
+                });
         };
 
     // init

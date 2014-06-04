@@ -20,74 +20,59 @@ $(function () {
         that.data = ko.observable({});
 
         that.update = function (o) {
-            o = o || {};
-
-            $.ajax({
+            return $.ajax({
                 type: options.updateType,
                 url: options.updateUrl,
-                dataType: "json",
-                success: function (data, status, xhr) {
-                    _.each(data, function (x) {
-                        x.name = util.htmlspecialchars_decode(x.name);
-                    });
+                dataType: "json"
+            }).then(function (data, status, xhr) {
+                _.each(data, function (x) {
+                    x.name = util.htmlspecialchars_decode(x.name);
+                });
 
-                    var oldData = that.data(),
-                        newData = {},
-                        both = _.intersection(_.keys(oldData), _.keys(data));
+                var oldData = that.data(),
+                    newData = {},
+                    both = _.intersection(_.keys(oldData), _.keys(data));
 
-                    // 新旧両方にあるものはそのままのオブジェクトを用いて中身更新
-                    _.each(both, function (x) {
-                        newData[x] = oldData[x];
-                        newData[x].data(data[x].data);
-                        newData[x].name(data[x].name);
-                    });
+                // 新旧両方にあるものはそのままのオブジェクトを用いて中身更新
+                _.each(both, function (x) {
+                    newData[x] = oldData[x];
+                    newData[x].data(data[x].data);
+                    newData[x].name(data[x].name);
+                });
 
-                    // 旧データにない新しいデータは挿入
-                    _.chain(data).omit(_.keys(oldData)).each(function (v, k) {
-                        newData[k] = {
-                            id: v.id,
-                            name: ko.observable(v.name),
-                            data: ko.observable(v.data)
-                        }
-                    });
+                // 旧データにない新しいデータは挿入
+                _.chain(data).omit(_.keys(oldData)).each(function (v, k) {
+                    newData[k] = {
+                        id: v.id,
+                        name: ko.observable(v.name),
+                        data: ko.observable(v.data)
+                    }
+                });
 
-                    // 更新
-                    that.data(newData);
-
-                    o.success && o.success();
-                },
-                error: o.error || null
+                // 更新
+                that.data(newData);
             });
         };
 
-        that. upload = function (o) {
-            o = o || {};
-
-            $.ajax({
+        that. upload = function (data) {
+            return $.ajax({
                 type: options.uploadType,
                 url: options.uploadUrl,
-                data: o.data || null,
+                data: data,
                 dataType: "json",
                 processData: false,
-                contentType: false,
-                success: o.success || null,
-                error: o.error || null
+                contentType: false
             });
         };
 
-        that.remove = function (o) {
-            o = o || {};
-
-            $.ajax({
+        that.remove = function (data) {
+            return $.ajax({
                 type: options.removeType,
                 url: options.removeUrl,
-                data: o.data || null,
-                dataType: "json",
-                success: o.success || null,
-                error: o.error || null
+                data: data,
+                dataType: "json"
             });
         };
-
-        return that;
     };
+
 });
