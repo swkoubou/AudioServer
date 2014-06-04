@@ -66,6 +66,30 @@ $(function () {
                 navigator.userAgent.indexOf('iPad') == -1) ||
                 navigator.userAgent.indexOf('iPod') > 0 ||
                 navigator.userAgent.indexOf('Android') > 0;
+        },
+
+        cancelEvent: function (obj, e) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        },
+
+        wrapCancelEvent: function (func) {
+            var cancel_event = this.cancelEvent;
+            return function (item, obj, e) {
+                func(item);
+                cancel_event(obj, e);
+                return false;
+            }
+        },
+
+        wrapCancelEventAll: function (object, methodNames) {
+            var wrap_cancel_event = this.wrapCancelEvent.bind(this);
+            _.each(methodNames, function (methodName) {
+                if (_.isFunction(object[methodName])) {
+                    object[methodName] = wrap_cancel_event(object[methodName]);
+                }
+            });
         }
     };
 });

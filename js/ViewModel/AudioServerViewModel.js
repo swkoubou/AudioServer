@@ -208,7 +208,7 @@ $(function () {
         };
 
         // ボリュームを変更する
-        that.changeVolumeOrig = function () {
+        that.changeVolume = function () {
             statusModel.data.volume($(".music-volume").val());
 
             return statusModel.change("volume", statusModel.data.volume())
@@ -221,12 +221,6 @@ $(function () {
                 .always(function () {
                     that.statusUpdate(false);
                 });
-        };
-
-        that.changeVolume = function () {
-            that.changeVolumeOrig();
-
-            return true; // enable event bubble
         };
 
         // リピート再生モードを切り替える
@@ -544,7 +538,7 @@ $(function () {
         };
 
         // 曲を選択
-        that.selectMusicOrig = function (id) {
+        that.selectMusic = function (id) {
             return statusModel.select(id)
                 .done(function () {
                     that.alert(options.alerts.selectMusicSuccess);
@@ -554,12 +548,6 @@ $(function () {
                     console.log(x, h, r);
                     that.alert(options.alerts.selectMusicError);
                 });
-        };
-
-        that.selectMusic = function (id, obj, event) {
-            that.selectMusicOrig(id);
-            that.cancelEvent(obj, event); // cancel bubble
-            return false;
         };
     };
 });

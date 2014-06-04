@@ -236,7 +236,7 @@ $(function () {
     loadingViewModel.wrapDeferredAll(audioServerViewModel, [
         "statusUpdate",
         "play",
-        "changeVolumeOrig",
+        "changeVolume",
         "repeat",
         "random",
         "createNewPlaylist",
@@ -247,7 +247,13 @@ $(function () {
         "removePlaylist",
         "stepForward",
         "stepBack",
-        "selectMusicOrig"
+        "selectMusic"
+    ]);
+
+    // cancel event ! 戻り値はfalseに固定される !
+    util.wrapCancelEventAll(audioServerViewModel, [
+        "changeVolume",
+        "selectMusic"
     ]);
 
     // init
