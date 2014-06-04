@@ -25,7 +25,9 @@ $(function () {
             selectUrl: "api/selectmusic.php"
         }), userModel = new model.UserModel({
             updateUrl: "api/user.php"
-        }), vm = new viewmodel.AudioServerViewModel({
+        }), loadingViewModel = new viewmodel.LoadingViewModel({
+
+        }), audioServerViewModel = new viewmodel.AudioServerViewModel({
             musicModel: musicModel,
             playlistModel: playlistModel,
             statusModel: statusModel,
@@ -202,6 +204,7 @@ $(function () {
                 }
             }
         }),
+        vm = _.extend(audioServerViewModel, loadingViewModel),
         waitUpdate = 3000,
         initWait = 3000,
         update = function () {
@@ -228,6 +231,24 @@ $(function () {
                     setTimeout(init, initWait);
                 });
         };
+
+    // loading wrapping
+    loadingViewModel.wrapDeferredAll(audioServerViewModel, [
+        "statusUpdate",
+        "play",
+        "changeVolumeOrig",
+        "repeat",
+        "random",
+        "createNewPlaylist",
+        "uploadMusic",
+        "addMusicToPlaylist",
+        "removeMusicFromPlaylist",
+        "clearCurrentPlaylist",
+        "removePlaylist",
+        "stepForward",
+        "stepBack",
+        "selectMusicOrig"
+    ]);
 
     // init
     init();

@@ -41,33 +41,25 @@ $(function () {
             return ary;
         },
 
-	/***************************************************
-  	  特殊文字を HTML エンティティに変換する
-	 ***************************************************/
-	htmlspecialchars: function(str) {
-	  return str.replace(/[&"'<>]/g, function($0) {
-	    if ($0 == "&")  return '&amp;';
-	    if ($0 == "\"") return '&quot;';
-	    if ($0 == "'")  return '&#039;';
-	    if ($0 == "<")  return '&lt;';
-	    if ($0 == ">")  return '&gt;';
-	  });
-	},
+        htmlspecialchars: function (str) {
+            return str.replace(/[&"'<>]/g, function ($0) {
+                if ($0 == "&")  return '&amp;';
+                if ($0 == "\"") return '&quot;';
+                if ($0 == "'")  return '&#039;';
+                if ($0 == "<")  return '&lt;';
+                if ($0 == ">")  return '&gt;';
+            });
+        },
 
-	/***************************************************
-	
-	    特殊な HTML エンティティを文字に戻す
-	
-	 ***************************************************/
-	htmlspecialchars_decode: function(str) {
-	  return str.replace(/&(gt|lt|#039|quot|amp);/ig, function($0, $1) {
-	    if (/^gt$/i.test($1))   return ">";
-	    if (/^lt$/i.test($1))   return "<";
-	    if (/^#039$/.test($1))  return "'";
-	    if (/^quot$/i.test($1)) return "\"";
-	    if (/^amp$/i.test($1))  return "&";
-	  });
-	},
+        htmlspecialchars_decode: function (str) {
+            return str.replace(/&(gt|lt|#039|quot|amp);/ig, function ($0, $1) {
+                if (/^gt$/i.test($1))   return ">";
+                if (/^lt$/i.test($1))   return "<";
+                if (/^#039$/.test($1))  return "'";
+                if (/^quot$/i.test($1)) return "\"";
+                if (/^amp$/i.test($1))  return "&";
+            });
+        },
 
         isSmartAgent: function () {
             return (navigator.userAgent.indexOf('iPhone') > 0 &&

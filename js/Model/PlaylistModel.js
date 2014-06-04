@@ -98,7 +98,7 @@ $(function () {
         };
 
         that.removeMusic = function (playlist_id, musics_id) {
-            var dfd = $.Deffered().resolve();
+            var dfd = $.Deferred().resolve();
 
             while (musics_id.length) {
                 dfd = dfd.then($.ajax.bind(this, {
