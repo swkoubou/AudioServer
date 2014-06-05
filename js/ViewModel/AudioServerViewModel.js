@@ -311,9 +311,7 @@ $(function () {
         // 曲をプレイリストに追加
         that.addMusicToPlaylist = function () {
             return playlistModel.addMusic(that.whereAddPlaylist().id, that.checkCurrentMusicIds())
-                .done(function () {
-                    that.update();
-                });
+                .done(function () { that.update(); });
         };
 
         /*
@@ -323,9 +321,7 @@ $(function () {
         // 曲をプレイリストから削除
         that.removeMusicFromPlaylist = function () {
             return playlistModel.removeMusic(that.currentPlaylist().id, that.checkCurrentMusicIds())
-                .done(function () {
-                    that.update();
-                });
+                .done(function () { that.update(); });
         };
 
         /*
@@ -335,9 +331,7 @@ $(function () {
         // カレントプレイリストのリセット
         that.clearCurrentPlaylist = function () {
             return playlistModel.currentClear()
-                .done(function () {
-                    that.update();
-                });
+                .done(function () { that.update(); });
         };
 
         /*
@@ -360,25 +354,19 @@ $(function () {
         // 次の曲へ
         that.stepForward = function () {
             return statusModel.stepForward()
-                .done(function () {
-                    that.update();
-                });
+                .done(function () { that.update(); });
         };
 
         // 前の曲へ
         that.stepBack = function () {
             return statusModel.stepBack()
-                .done(function () {
-                    that.update();
-                });
+                .done(function () { that.update(); });
         };
 
         // 曲を選択
         that.selectMusic = function (id) {
             return statusModel.select(id)
-                .done(function () {
-                    that.update();
-                });
+                .done(function () { that.update(); });
         };
     };
 });
