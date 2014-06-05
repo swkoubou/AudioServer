@@ -22,8 +22,6 @@ $(function () {
         statusModel = new model.StatusModel({
             updateUrl: test ? "stub/status.php" : "api/status.php",
             changeUrl: test ? "stub/status.php" : "api/status.php",
-            stepForwardUrl: test ? "stub/status.php" : "api/status.php",
-            stepBackUrl: test ? "stub/status.php" : "api/status.php",
             selectUrl: "api/selectmusic.php"
         }),
         userModel = new model.UserModel({

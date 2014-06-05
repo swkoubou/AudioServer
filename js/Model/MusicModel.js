@@ -13,13 +13,36 @@ $(function () {
             removeType: "DELETE"
         };
 
+    /**
+     * 曲に関するModel
+     *
+     * @param {!Object} o
+     * @param {string} o.updateUrl
+     * @param {string} o.uploadUrl
+     * @param {string} o.removeUrl
+     * @param {string} [o.updateType="GET"]
+     * @param {string} [o.uploadType="POST"]
+     * @param {string} [o.removeType="DELETE"]
+     * @constructor
+     */
     ns.MusicModel = function MusicModel(o) {
         var that = this,
             options = _.defaults(o || {}, defaultOptions);
 
+        /**
+         * 全ての曲データを持つ連想配列
+         * 曲IDがキーとなる
+         *
+         * @type {Object}
+         */
         that.data = ko.observable({});
 
-        that.update = function (o) {
+        /**
+         * 曲リストを更新する
+         *
+         * @returns {Deferred}
+         */
+        that.update = function () {
             return $.ajax({
                 type: options.updateType,
                 url: options.updateUrl,
@@ -54,7 +77,13 @@ $(function () {
             });
         };
 
-        that. upload = function (data) {
+        /**
+         * 曲をアップロードする
+         *
+         * @param data アップロードする曲のデータ
+         * @returns {Deferred}
+         */
+        that.upload = function (data) {
             return $.ajax({
                 type: options.uploadType,
                 url: options.uploadUrl,
@@ -65,6 +94,12 @@ $(function () {
             });
         };
 
+        /**
+         * 曲を削除する（未実装）
+         *
+         * @param data 削除する曲のデータ
+         * @returns {Deferred}
+         */
         that.remove = function (data) {
             return $.ajax({
                 type: options.removeType,

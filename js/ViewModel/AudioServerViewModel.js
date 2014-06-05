@@ -133,13 +133,14 @@ $(function () {
         that.update = function () {
             return musicModel.update()
                 .then(playlistModel.update.bind(playlistModel))
-                .then(statusModel.update.bind(statusModel));
+                .then(statusModel.update.bind(statusModel))
+                .then(userModel.update.bind(userModel));
         };
 
         // 開始/停止する
         that.play = function () {
             return statusModel.change("play", !statusModel.data.isPlay())
-                .always(function () { statusModel.update(); })
+                .alwayzs(function () { statusModel.update(); })
         };
 
         // ボリュームを変更する
