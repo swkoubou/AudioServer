@@ -5,29 +5,32 @@ $(function () {
 
     var model = util.namespace("swkoubou.audioserver.model"),
         viewmodel = util.namespace("swkoubou.audioserver.viewmodel"),
-        test = true,
+        test = true, // trueのときはstubApiを叩く (また、そのようにコーディングする）
         musicModel = new model.MusicModel({
             updateUrl: "api/musiclist.php",
             uploadUrl: "api/upload.php",
             removeUrl: "stub/music.php"
-        }), playlistModel = new model.PlaylistModel({
+        }),
+        playlistModel = new model.PlaylistModel({
             updateUrl: "api/playlist.php",
             createUrl: "api/playlist.php",
             removeUrl: "api/playlistdelete.php",
             currentClearUrl: "api/currentclear.php",
             addMusicUrl: "api/playlistmusicadd.php",
             removeMusicUrl: "api/playlistmusicdelete.php"
-        }), statusModel = new model.StatusModel({
+        }),
+        statusModel = new model.StatusModel({
             updateUrl: test ? "stub/status.php" : "api/status.php",
             changeUrl: test ? "stub/status.php" : "api/status.php",
             stepForwardUrl: test ? "stub/status.php" : "api/status.php",
             stepBackUrl: test ? "stub/status.php" : "api/status.php",
             selectUrl: "api/selectmusic.php"
-        }), userModel = new model.UserModel({
+        }),
+        userModel = new model.UserModel({
             updateUrl: "api/user.php"
-        }), loadingViewModel = new viewmodel.LoadingViewModel({
-
-        }), audioServerViewModel = new viewmodel.AudioServerViewModel({
+        }),
+        loadingViewModel = new viewmodel.LoadingViewModel(),
+        audioServerViewModel = new viewmodel.AudioServerViewModel({
             musicModel: musicModel,
             playlistModel: playlistModel,
             statusModel: statusModel,
