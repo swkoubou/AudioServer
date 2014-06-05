@@ -38,6 +38,13 @@ $(function () {
         that.data = ko.observable({});
 
         /**
+         * 最後にアップロードした（もしくはアップロード中の）ファイル名
+         *
+         * @type {string=}
+         */
+        that.lastUploadFileName = ko.observable();
+
+        /**
          * 曲リストを更新する
          *
          * @returns {Deferred}
@@ -80,18 +87,34 @@ $(function () {
         /**
          * 曲をアップロードする
          *
-         * @param data アップロードする曲のデータ
+         * @param {update} user_name ユーザ名
+         * @param {File} file アップロードする曲のFileオブジェクト
          * @returns {Deferred}
          */
-        that.upload = function (data) {
+        that.upload = function (user_name, file) {
+            var fd = new FormData();
+            fd.append("name", user_name);
+            fd.append("file", file);
+            that.lastUploadFileName(file.name);
+
             return $.ajax({
                 type: options.uploadType,
                 url: options.uploadUrl,
-                data: data,
+                data: { data: fd },
                 dataType: "json",
                 processData: false,
                 contentType: false
             });
+        };
+
+        that.uploads = function (user_name, files) {
+            var dfd = $.Deferred().resolve();
+
+            _.each(files, function (file) {
+                dfd.then(that.upload.bind(that, user_name, file));
+            });
+
+            return dfd;
         };
 
         /**

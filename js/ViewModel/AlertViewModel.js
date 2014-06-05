@@ -51,7 +51,7 @@ $(function () {
          * @returns {swkoubou.audioserver.viewmodel.AlertViewModel}
          */
         that.pushAlert = function (content) {
-            var obj = new AlertContent(content);
+            var obj = new ns.AlertContent(content);
 
             that.alerts.unshift(obj);
 
