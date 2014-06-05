@@ -5,45 +5,8 @@ $(function () {
 
     var ns = util.namespace("swkoubou.audioserver.viewmodel");
 
-    ns.AudioServerViewModel = function (models, user_options) {
+    ns.AudioServerViewModel = function (models) {
         var that = this,
-            defaultOptions = {
-                waitHideAlert: 5000,
-                maxAlert: 5,
-                alerts: {
-                    updateSuccess: null,
-                    updateError: null,
-                    statusUpdateSuccess: null,
-                    statusUpdateError: null,
-                    playSuccess: null,
-                    playError: null,
-                    changeVolumeSuccess: null,
-                    changeVolumeError: null,
-                    repeatSuccess: null,
-                    repeatError: null,
-                    randomSuccess: null,
-                    randomError: null,
-                    createPlaylistSuccess: null,
-                    createPlaylistError: null,
-                    uploadMusicSuccess: null,
-                    uploadMusicError: null,
-                    addMusicToPlaylistSuccess: null,
-                    addMusicToPlaylistError: null,
-                    removeMusicFromPlaylistSuccess: null,
-                    removeMusicFromPlaylistError: null,
-                    currentPlaylistClearSuccess: null,
-                    currentPlaylistClearError: null,
-                    removePlaylistSuccess: null,
-                    removePlaylistError: null,
-                    stepForwardSuccess: null,
-                    stepForwardError: null,
-                    stepBackSuccess: null,
-                    stepBackError: null,
-                    selectMusicSuccess: null,
-                    selectMusicError: null
-                }
-            },
-            options = _.defaults(user_options || {}, defaultOptions),
             musicModel = models.musicModel,
             playlistModel = models.playlistModel,
             statusModel = models.statusModel,
@@ -159,137 +122,44 @@ $(function () {
             }, []);
         });
 
-        // アラートリスト
-        that.alerts = ko.observableArray();
-
-        // ロード中かどうか
-        that.isLoading = ko.observable(false);
-
         /*
          * method
          */
 
         // ステータスを更新する
-        that.statusUpdate = function (alert) {
-            alert = _.isBoolean(alert) ? alert : true;
-            that.isLoading(true);
-
-            statusModel.update({
-                success: function () {
-                    alert && that.alert(options.alerts.statusUpdateSuccess);
-                    that.isLoading(false);
-                }, error: function () {
-                    alert && that.alert(options.alerts.statusUpdateError);
-                    that.isLoading(false);
-                }
-            })
-        };
+        that.statusUpdate = statusModel.update.bind(statusModel);
 
         // 全ての情報を更新する
-        that.update = function (o) {
-            var opt = _.defaults(o || {}, {
-                success: function () { },
-                error: function () { },
-                loading: false
-            }), success = function () {
-                options.alerts.updateSuccess && that.alert(options.alerts.updateSuccess);
-                opt.loading && that.isLoading(false);
-                opt.success();
-            }, error = function () {
-                options.alerts.updateError && that.alert(options.alerts.updateError);
-                opt.loading && that.isLoading(false);
-                opt.error();
-            };
-
-            opt.loading && that.isLoading(true);
-
-            musicModel.update({
-                success: function () {
-                    playlistModel.update({
-                        success: function () {
-                            statusModel.update({
-                                success: function () {
-                                    userModel.update({
-                                        success: success,
-                                        error: error
-                                    })
-                                },
-                                error: error
-                            });
-                        },
-                        error: error
-                    });
-                },
-                error: error
-            });
+        that.update = function () {
+            return musicModel.update()
+                .then(playlistModel.update.bind(playlistModel))
+                .then(statusModel.update.bind(statusModel));
         };
 
         // 開始/停止する
         that.play = function () {
-            that.isLoading(true);
-
-            statusModel.change("play", !statusModel.data.isPlay(), {
-                success: function () {
-                    that.alert(options.alerts.playSuccess);
-                    that.statusUpdate(false);
-                },
-                error: function () {
-                    that.alert(options.alerts.playError);
-                    that.isLoading(false);
-                }
-            });
+            return statusModel.change("play", !statusModel.data.isPlay())
+                .always(function () { statusModel.update(); })
         };
 
         // ボリュームを変更する
         that.changeVolume = function () {
-            that.isLoading(true);
-
             statusModel.data.volume($(".music-volume").val());
 
-            statusModel.change("volume", statusModel.data.volume(), {
-                success: function () {
-                    that.alert(options.alerts.changeVolumeSuccess);
-                    that.statusUpdate(false);
-                },
-                error: function () {
-                    that.alert(options.alerts.changeVolumeError);
-                    that.statusUpdate(false);
-                }
-            });
-
-            return true; // enable event bubble
+            return statusModel.change("volume", statusModel.data.volume())
+                .always(function () { statusModel.update(); });
         };
 
         // リピート再生モードを切り替える
         that.repeat = function () {
-            that.isLoading(true);
-
-            statusModel.change("repeat", !statusModel.data.isRepeat(), {
-                success: function (data) {
-                    that.alert(options.alerts.repeatSuccess);
-                    that.statusUpdate(false);
-                },
-                error: function () {
-                    that.alert(options.alerts.repeatError);
-                    that.isLoading(false);
-                }
-            });
+            return statusModel.change("repeat", !statusModel.data.isRepeat())
+                .always(function () { statusModel.update(); })
         };
 
         // ランダム再生モードを切り替える
         that.random = function () {
-            that.isLoading(true);
-
-            statusModel.change("random", !statusModel.data.isRandom(), {
-                success: function () {
-                    that.alert(options.alerts.randomSuccess);
-                    that.statusUpdate(false);
-                },
-                error: function () {
-                    that.alert(options.alerts.randomError);
-                    that.isLoading(false);
-                }
-            });
+            return statusModel.change("random", !statusModel.data.isRandom())
+                .always(function () { statusModel.update(); });
         };
 
         // 曲のチェックをON/OFFする
@@ -317,35 +187,6 @@ $(function () {
         that.currentPlaylist.subscribe(function () {
             that.allChecked(false);
         });
-
-        // アラートを追加する
-        that.alert = function (o) {
-            var obj;
-
-            if (!o) {
-                return;
-            }
-
-            obj = _.defaults(_.clone(o) || {}, {
-                title: "",
-                message: "",
-                isSuccess: false
-            });
-
-            if (_.isFunction(obj.message)) {
-                obj.message = obj.message();
-            }
-
-            that.alerts.unshift(obj);
-
-            // maxAlert以上のアラートを削除
-            that.alerts.splice(options.maxAlert);
-
-            // x秒後に自動的に削除
-            setTimeout(function () {
-                that.alerts.remove(obj);
-            }, options.waitHideAlert);
-        };
 
         /*
          * user name
@@ -399,23 +240,16 @@ $(function () {
         });
 
         // 新規プレイリストを作成する
-        that.createNewPlaylist = function (o) {
-            if (that.validationPlaylistName()) {
-                that.isLoading(true);
-
-                playlistModel.create(that.newPlaylistName(), {
-                    success: function () {
-                        that.alert(options.alerts.createPlaylistSuccess);
-                        that.isLoading(false);
-                        that.update(o);
-                        that.newPlaylistName("");
-                    },
-                    error: function () {
-                        that.alert(options.alerts.createPlaylistError);
-                        that.isLoading(false);
-                    }
-                });
+        that.createNewPlaylist = function () {
+            if (!that.validationPlaylistName()) {
+                return $.Deferred().reject();
             }
+
+            return playlistModel.create(that.newPlaylistName())
+                .done(function () {
+                    that.update();
+                    that.newPlaylistName("");
+                });
         };
 
         /*
@@ -429,51 +263,33 @@ $(function () {
             // FormData オブジェクトを作成
             var fd = new FormData(),
                 files = e.file.files,
-                done = function () {
-                    $(".modal").modal('hide');
-                    that.isLoading(false);
-                };
+                name = that.userName(),
+                dfd = $.Deferred().resolve();
 
             fd.append("name", that.userName());
 
-            (function loop (idx) {
-                var file = files[idx];
+            _.each(files, function (file) {
+                var fd = new FormData();
                 that.uploadFileName(file.name);
+                fd.append("name", name);
                 fd.append("file", file);
 
-                that.isLoading(true);
-
-                musicModel.upload({
-                    data: fd,
-                    success: function () {
-                        that.alert(options.alerts.uploadMusicSuccess);
-                        if (idx + 1 === files.length) {
-                            done();
-                        }else {
-                            loop(idx + 1);
-                        }
-                    },
-                    error: function (xhr, thrown, status) {
-			            console.log(xhr, thrown, status);
-                        that.alert(options.alerts.uploadMusicError);
-                        done();
-                    }
+                dfd.then(function () {
+                    musicModel.upload({ data: fd });
                 });
+            });
 
-            }(0));
-        };
+            dfd.always(function () {
+                $(".modal").modal('hide');
+            });
 
-        // イベントキャンセル
-        that.cancelEvent = function (obj, e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
+            return dfd;
         };
 
         // dropイベント
         that.dropUploadMusic = function (obj, e) {
             console.log(e.originalEvent.dataTransfer.files);
-            return that.cancelEvent(obj, e);
+            return that.cancelBubble(obj, e);
         };
 
         /*
@@ -494,19 +310,8 @@ $(function () {
 
         // 曲をプレイリストに追加
         that.addMusicToPlaylist = function () {
-            that.isLoading(true);
-
-            playlistModel.addMusic(that.whereAddPlaylist().id, that.checkCurrentMusicIds(), {
-                success: function () {
-                    that.alert(options.alerts.addMusicToPlaylistSuccess);
-                    that.isLoading(false);
-                    that.update();
-                },
-                error: function () {
-                    that.alert(options.alerts.addMusicToPlaylistError);
-                    that.isLoading(false);
-                }
-            });
+            return playlistModel.addMusic(that.whereAddPlaylist().id, that.checkCurrentMusicIds())
+                .done(function () { that.update(); });
         };
 
         /*
@@ -515,20 +320,8 @@ $(function () {
 
         // 曲をプレイリストから削除
         that.removeMusicFromPlaylist = function () {
-            that.isLoading(true);
-
-            playlistModel.removeMusic(that.currentPlaylist().id, that.checkCurrentMusicIds(), {
-                success: function () {
-                    that.alert(options.alerts.removeMusicFromPlaylistSuccess);
-                    that.isLoading(false);
-                    that.update();
-                },
-                error: function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.removeMusicFromPlaylistError);
-                    that.isLoading(false);
-                }
-            });
+            return playlistModel.removeMusic(that.currentPlaylist().id, that.checkCurrentMusicIds())
+                .done(function () { that.update(); });
         };
 
         /*
@@ -537,20 +330,8 @@ $(function () {
 
         // カレントプレイリストのリセット
         that.clearCurrentPlaylist = function () {
-            that.isLoading(true);
-
-            playlistModel.currentClear({
-                success: function () {
-                    that.alert(options.alerts.currentPlaylistClearSuccess);
-                    that.isLoading(false);
-                    that.update();
-                },
-                error: function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.currentPlaylistClearError);
-                    that.isLoading(false);
-                }
-            });
+            return playlistModel.currentClear()
+                .done(function () { that.update(); });
         };
 
         /*
@@ -559,21 +340,11 @@ $(function () {
 
         // プレイリストを削除
         that.removePlaylist = function () {
-            that.isLoading(true);
-
-            playlistModel.remove(that.currentPlaylist().id, {
-                success: function () {
-                    that.alert(options.alerts.removePlaylistSuccess);
-                    that.isLoading(false);
+            return playlistModel.remove(that.currentPlaylist().id)
+                .done(function () {
                     that.currentPlaylist(that.playlists[0]);
                     that.update();
-                },
-                error: function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.removePlaylistError);
-                    that.isLoading(false);
-                }
-            });
+                });
         };
 
         /*
@@ -582,61 +353,20 @@ $(function () {
 
         // 次の曲へ
         that.stepForward = function () {
-            that.isLoading(true);
-
-            statusModel.stepForward({
-                success: function () {
-                    that.alert(options.alerts.stepForwardSuccess);
-                    that.isLoading(false);
-                    that.update();
-                },
-                error: function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.stepForwardError);
-                    that.isLoading(false);
-                }
-            });
+            return statusModel.stepForward()
+                .done(function () { that.update(); });
         };
 
         // 前の曲へ
         that.stepBack = function () {
-            that.isLoading(true);
-
-            statusModel.stepBack({
-                success: function () {
-                    that.alert(options.alerts.stepBackSuccess);
-                    that.isLoading(false);
-                    that.update();
-                },
-                error: function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.stepBackError);
-                    that.isLoading(false);
-                }
-            });
+            return statusModel.stepBack()
+                .done(function () { that.update(); });
         };
 
         // 曲を選択
-        that.selectMusic = function (id, obj, event) {
-            that.isLoading(true);
-
-            statusModel.select(id, {
-                success: function () {
-                    that.alert(options.alerts.selectMusicSuccess);
-                    that.isLoading(false);
-                    that.update();
-                },
-                error: function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.selectMusicError);
-                    that.isLoading(false);
-                }
-            });
-
-            that.cancelEvent(obj, event); // cancel bubble
-            return false;
+        that.selectMusic = function (id) {
+            return statusModel.select(id)
+                .done(function () { that.update(); });
         };
-
-        return that;
     };
 });

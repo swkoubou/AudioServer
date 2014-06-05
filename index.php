@@ -22,7 +22,7 @@
 <body>
 
 <!-- load animation -->
-<div class="loading" data-bind="visible: isLoading === undefined || isLoading">
+<div class="loading" data-bind="visible: isLoading">
     <img src="img/load.gif">
     <div class="loading-text"></div>
 </div>
@@ -388,6 +388,8 @@
 <script src="js/Model/PlaylistModel.js"></script>
 <script src="js/Model/StatusModel.js"></script>
 <script src="js/Model/UserModel.js"></script>
+<script src="js/ViewModel/LoadingViewModel.js"></script>
+<script src="js/ViewModel/AlertViewModel.js"></script>
 <script src="js/ViewModel/AudioServerViewModel.js"></script>
 <script src="js/main.js"></script>
 </body>
