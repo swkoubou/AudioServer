@@ -5,8 +5,10 @@
 	$proc = filter_input(INPUT_POST, "type", FILTER_SANITIZE_SPECIAL_CHARS);
 	$value = filter_input(INPUT_POST, "value", FILTER_SANITIZE_SPECIAL_CHARS);
 	$music_id = 0;
+    $DEBUG = true;
 	if(!$proc || $proc == "" || $proc == null){
 		exec("mpc status",$op);
+        if($DEBUG) $op = "#/0";
 		if(count($op)==1){
 			$isPlay = "false";
 			$statusstr = $op[0];
@@ -29,9 +31,9 @@
 			$statusstr = $op[2];
 		}
 		$statusstr = explode(":",$statusstr);
-		$volume = trim(substr($statusstr[1],0,3));
-		$repeat = trim(substr($statusstr[2],0,4));
-		$random = trim(substr($statusstr[3],0,4));
+		$volume = $DEBUG ? 100 : trim(substr($statusstr[1],0,3));
+		$repeat = $DEBUG ? "off" : trim(substr($statusstr[2],0,4));
+		$random = $DEBUG ? "off" : trim(substr($statusstr[3],0,4));
 		
 		
 		$output = array(
