@@ -32,179 +32,9 @@ $(function () {
             playlistModel: playlistModel,
             statusModel: statusModel,
             userModel: userModel
-        }, {
-            waitHideAlert: 2000,
-            maxAlert: 5,
-            alerts: {
-//                updateSuccess: { },  // 同期成功時はメッセージ無し},
-                updateError: {
-                    title: "Error",
-                    message: "同期失敗...",
-                    isSuccess: false
-                },
-                statusUpdateSuccess: {
-                    title: "Success!",
-                    message: "ステータスを同期しました。",
-                    isSuccess: true
-                },
-                statusUpdateError: {
-                    title: "Error...",
-                    message: "ステータスの同期に失敗しました。",
-                    isSuccess: false
-                },
-                playSuccess: {
-                    title: "Success!",
-                    message: function () {
-                        return statusModel.data.isPlay() ? "停止しました" : "再生しました。";
-                    },
-                    isSuccess: true
-                },
-                playError: {
-                    title: "Error...",
-                    message: function () {
-                        return statusModel.data.isPlay() ? "再生に失敗しました。" : "停止に失敗しました。";
-                    },
-                    isSuccess: false
-                },
-                changeVolumeSuccess: {
-                    title: "Success!",
-                    message: function () {
-                        return "音量を変更しました。(" + statusModel.data.volume() + ")";
-                    },
-                    isSuccess: true
-                },
-                changeVolumeError: {
-                    title: "Error...",
-                    message: function () {
-                        return "音量を変更できませんでした。(" + statusModel.data.volume() + ")";
-                    },
-                    isSuccess: false
-                },
-                repeatSuccess: {
-                    title: "Success!",
-                    message: function () {
-                        return statusModel.data.isRepeat() ? "リピートモードを解除しました。" : "リピートモードを有効にしました。" ;
-                    },
-                    isSuccess: true
-                },
-                repeatError: {
-                    title: "Error...",
-                    message: function () {
-                        return statusModel.data.isRepeat() ? "リピートモードの有効化に失敗しました。" : "リピートモードの解除に失敗しました。";
-                    },
-                    isSuccess: false
-                },
-                randomSuccess: {
-                    title: "Success!",
-                    message: function () {
-                        return statusModel.data.isRandom() ? "ランダムモードを解除しました。" : "ランダムモードを有効にしました。";
-                    },
-                    isSuccess: true
-                },
-                randomError: {
-                    title: "Error...",
-                    message: function () {
-                        return statusModel.data.isRepeat() ? "ランダムモードの有効化に失敗しました。" : "ランダムモードの解除に失敗しました。";
-                    },
-                    isSuccess: false
-                },
-                createPlaylistSuccess: {
-                    title: "Success!",
-                    message: "プレイリストを作成しました。",
-                    isSuccess: true
-                },
-                createPlaylistError: {
-                    title: "Error...",
-                    message: "プレイリストを作成できませんでした。",
-                    isSuccess: false
-                },
-                uploadMusicSuccess: {
-                    title: "Success!",
-                    message: function () {
-                        return "uploaded " + vm.uploadFileName()
-                    },
-                    isSuccess: true
-                },
-                uploadMusicError: {
-                    title: "Error...",
-                    message: function () {
-                        return "cannot uploaded " + vm.uploadFileName() + " so cancel upload."
-                    },
-                    isSuccess: false
-                },
-                addMusicToPlaylistSuccess: {
-                    title: "Success!",
-                    message: "プレイリストに曲を追加しました。",
-                    isSuccess: true
-                },
-                addMusicToPlaylistError: {
-                    title: "Error...",
-                    message: "プレイリストの曲追加に失敗しました。",
-                    isSuccess: false
-                },
-                removeMusicFromPlaylistSuccess: {
-                    title: "Success!",
-                    message: "プレイリストの曲追加に成功しました。",
-                    isSuccess: true
-                },
-                removeMusicFromPlaylistError: {
-                    title: "Error...",
-                    message: "プレイリストの曲削除に失敗しました。",
-                    isSuccess: false
-                },
-                currentPlaylistClearSuccess: {
-                    title: "Success!",
-                    message: "カレントプレイリストをクリアしました。",
-                    isSuccess: true
-                },
-                currentPlaylistClearError: {
-                    title: "Error...",
-                    message: "カレントプレイリストのクリアできませんでした。",
-                    isSuccess: false
-                },
-                removePlaylistSuccess: {
-                    title: "Success!",
-                    message: "プレイリストを削除しました。。",
-                    isSuccess: true
-                },
-                removePlaylistError: {
-                    title: "Error...",
-                    message: "プレイリストを削除できませんでした。",
-                    isSuccess: false
-                },
-                stepForwardSuccess: {
-                    title: "Success!",
-                    message: "次の曲へ進みました。",
-                    isSuccess: true
-                },
-                stepForwardError: {
-                    title: "Error...",
-                    message: "次の曲へ進めませんでした。",
-                    isSuccess: false
-                },
-                stepBackSuccess: {
-                    title: "Success!",
-                    message: "前の曲へ進みました。",
-                    isSuccess: true
-                },
-                stepBackError: {
-                    title: "Error...",
-                    message: "前の曲へ進めませんでした。",
-                    isSuccess: false
-                },
-                selectMusicSuccess: {
-                    title: "Success!",
-                    message: "曲を選択しました。",
-                    isSuccess: true
-                },
-                selectMusicError: {
-                    title: "Error...",
-                    message: "曲の選択に失敗しました。",
-                    isSuccess: false
-                }
-            }
         }),
-        vm = _.extend(audioServerViewModel, loadingViewModel),
+        alertViewModel = new viewmodel.AlertViewModel(),
+        vm = _.extend(audioServerViewModel, loadingViewModel, alertViewModel),
         waitUpdate = 3000,
         initWait = 3000,
         update = function () {
@@ -250,10 +80,96 @@ $(function () {
         "selectMusic"
     ]);
 
-    // cancel event ! 戻り値はfalseに固定される !
-    util.wrapCancelEventAll(audioServerViewModel, [
-        "changeVolume",
+    // message wrapping
+    alertViewModel.wrapDeferredAll(audioServerViewModel, [
+        {
+            methodName: "update",
+            errorMessage: "同期失敗..."
+        }, {
+            methodName: "statusUpdate",
+            successMessage: "ステータスを同期しました。",
+            errorMessage: "ステータスの同期に失敗しました。"
+        }, {
+            methodName: "play",
+            successMessage: function () {
+                return statusModel.data.isPlay() ? "停止しました" : "再生しました。";
+            },
+            errorMessage: function () {
+                return statusModel.data.isPlay() ? "再生に失敗しました。" : "停止に失敗しました。";
+            }
+        }, {
+            methodName: "changeVolume",
+            successMessage: function () {
+                return "音量を変更しました。(" + statusModel.data.volume() + ")";
+            },
+            errorMessage: function () {
+                return "音量を変更できませんでした。(" + statusModel.data.volume() + ")";
+            }
+        }, {
+            methodName: "repeat",
+            successMessage: function () {
+                return statusModel.data.isRepeat() ? "リピートモードを解除しました。" : "リピートモードを有効にしました。" ;
+            },
+            errorMessage: function () {
+                return statusModel.data.isRepeat() ? "リピートモードの有効化に失敗しました。" : "リピートモードの解除に失敗しました。";
+            }
+        }, {
+            methodName: "random",
+            successMessage: function () {
+                return statusModel.data.isRandom() ? "ランダムモードを解除しました。" : "ランダムモードを有効にしました。";
+            },
+            errorMessage: function () {
+                return statusModel.data.isRepeat() ? "ランダムモードの有効化に失敗しました。" : "ランダムモードの解除に失敗しました。";
+            }
+        }, {
+            methodName: "createNewPlaylist",
+            successMessage: "プレイリストを作成しました。",
+            errorMessage: "プレイリストを作成できませんでした。"
+        }, {
+            methodName: "uploadMusic",
+            successMessage: function () {
+                return "uploaded " + vm.uploadFileName()
+            },
+            errorMessage: function () {
+                return "cannot uploaded " + vm.uploadFileName() + " so cancel upload."
+            }
+        }, {
+            methodName: "addMusicToPlaylist",
+            successMessage:  "プレイリストに曲を追加しました。",
+            errorMessage: "プレイリストの曲追加に失敗しました。"
+        }, {
+            methodName: "removeMusicFromPlaylist",
+            successMessage: "プレイリストの曲追加に成功しました。",
+            errorMessage: "プレイリストの曲削除に失敗しました。"
+        }, {
+            methodName: "currentPlaylistClear",
+            successMessage: "カレントプレイリストをクリアしました。",
+            errorMessage: "カレントプレイリストのクリアできませんでした。"
+        }, {
+            methodName: "removePlaylist",
+            successMessage: "プレイリストを削除しました。。",
+            errorMessage: "プレイリストを削除できませんでした。"
+        }, {
+            methodName: "stepForward",
+            successMessage: "次の曲へ進みました。",
+            errorMessage: "次の曲へ進めませんでした。"
+        }, {
+            methodName: "stepBack",
+            successMessage: "前の曲へ進みました。",
+            errorMessage: "前の曲へ進めませんでした。"
+        }, {
+            methodName: "selectMusic",
+            successMessage: "曲を選択しました。",
+            errorMessage: "曲の選択に失敗しました。"
+        }
+    ]);
+
+    // event bubble 制御 !!! Deferredのチェーンは途切れます！ !!!
+    util.wrapCancelBubbleAll(audioServerViewModel, [
         "selectMusic"
+    ]);
+    util.wrapEnableBubbleAll(audioServerViewModel, [
+        "changeVolume"
     ]);
 
     // init

@@ -68,23 +68,50 @@ $(function () {
                 navigator.userAgent.indexOf('Android') > 0;
         },
 
-        cancelEvent: function (obj, e) {
+        wrapEnableBubble: function (func) {
+            return function () {
+                func.apply(this, arguments);
+                return true;
+            }
+        },
+
+        wrapEnableBubbleAll: function (object, methodNames){
+            var wrap_enable_bubble = this.wrapEnableBubble.bind(this);
+
+            _.each(methodNames, function (methodName) {
+                if (_.isFunction(object[methodName])) {
+                    object[methodName] = wrap_enable_bubble(object[methodName]);
+                }
+            });
+        },
+
+        cancelBubble: function (e) {
             e.preventDefault();
             e.stopPropagation();
             return false;
         },
 
-        wrapCancelEvent: function (func) {
-            var cancel_event = this.cancelEvent;
+        wrapCancelBubble: function (func) {
+            var cancel_event = this.cancelBubble;
+
             return function (item, obj, e) {
-                func(item);
-                cancel_event(obj, e);
-                return false;
+                if (arguments.length < 2) {
+                    func();
+                }else if (arguments.length < 3) {
+                    func();
+                    cancel_event(arguments[1]);
+                }else {
+                    func(item);
+                    cancel_event(arguments[arguments.length - 1]);
+                }
+
+                return true;
             }
         },
 
-        wrapCancelEventAll: function (object, methodNames) {
-            var wrap_cancel_event = this.wrapCancelEvent.bind(this);
+        wrapCancelBubbleAll: function (object, methodNames) {
+            var wrap_cancel_event = this.wrapCancelBubble.bind(this);
+
             _.each(methodNames, function (methodName) {
                 if (_.isFunction(object[methodName])) {
                     object[methodName] = wrap_cancel_event(object[methodName]);

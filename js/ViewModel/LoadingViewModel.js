@@ -18,7 +18,7 @@ $(function () {
             return function () {
                 that.isLoading(true);
 
-                return deferred().always(function () {
+                return deferred.apply(this, arguments).always(function () {
                     that.isLoading(false);
                 });
             };

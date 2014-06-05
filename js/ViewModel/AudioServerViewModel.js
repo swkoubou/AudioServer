@@ -5,45 +5,8 @@ $(function () {
 
     var ns = util.namespace("swkoubou.audioserver.viewmodel");
 
-    ns.AudioServerViewModel = function (models, user_options) {
+    ns.AudioServerViewModel = function (models) {
         var that = this,
-            defaultOptions = {
-                waitHideAlert: 5000,
-                maxAlert: 5,
-                alerts: {
-                    updateSuccess: null,
-                    updateError: null,
-                    statusUpdateSuccess: null,
-                    statusUpdateError: null,
-                    playSuccess: null,
-                    playError: null,
-                    changeVolumeSuccess: null,
-                    changeVolumeError: null,
-                    repeatSuccess: null,
-                    repeatError: null,
-                    randomSuccess: null,
-                    randomError: null,
-                    createPlaylistSuccess: null,
-                    createPlaylistError: null,
-                    uploadMusicSuccess: null,
-                    uploadMusicError: null,
-                    addMusicToPlaylistSuccess: null,
-                    addMusicToPlaylistError: null,
-                    removeMusicFromPlaylistSuccess: null,
-                    removeMusicFromPlaylistError: null,
-                    currentPlaylistClearSuccess: null,
-                    currentPlaylistClearError: null,
-                    removePlaylistSuccess: null,
-                    removePlaylistError: null,
-                    stepForwardSuccess: null,
-                    stepForwardError: null,
-                    stepBackSuccess: null,
-                    stepBackError: null,
-                    selectMusicSuccess: null,
-                    selectMusicError: null
-                }
-            },
-            options = _.defaults(user_options || {}, defaultOptions),
             musicModel = models.musicModel,
             playlistModel = models.playlistModel,
             statusModel = models.statusModel,
@@ -159,52 +122,24 @@ $(function () {
             }, []);
         });
 
-        // アラートリスト
-        that.alerts = ko.observableArray();
-
         /*
          * method
          */
 
         // ステータスを更新する
-        that.statusUpdate = function () {
-            return statusModel.update()
-                .done(function () {
-                    alert && that.alert(options.alerts.statusUpdateSuccess);
-                }
-                .fail(function () {
-                    alert && that.alert(options.alerts.statusUpdateError);
-                }));
-        };
+        that.statusUpdate = statusModel.update.bind(statusModel);
 
         // 全ての情報を更新する
         that.update = function () {
             return musicModel.update()
-                .then(function () {
-                    return playlistModel.update()
-                })
-                .then(function () {
-                    return statusModel.update();
-                })
-                .then(function () {
-                    options.alerts.updateSuccess && that.alert(options.alerts.updateSuccess);
-                }, function () {
-                    options.alerts.updateError && that.alert(options.alerts.updateError);
-                });
+                .then(playlistModel.update.bind(playlistModel))
+                .then(statusModel.update.bind(statusModel));
         };
 
         // 開始/停止する
         that.play = function () {
             return statusModel.change("play", !statusModel.data.isPlay())
-                .done(function () {
-                    that.alert(options.alerts.playSuccess);
-                })
-                .fail(function () {
-                    that.alert(options.alerts.playError);
-                })
-                .always(function () {
-                    that.statusUpdate(false);
-                })
+                .always(function () { statusModel.update(); })
         };
 
         // ボリュームを変更する
@@ -212,43 +147,19 @@ $(function () {
             statusModel.data.volume($(".music-volume").val());
 
             return statusModel.change("volume", statusModel.data.volume())
-                .done(function () {
-                    that.alert(options.alerts.changeVolumeSuccess);
-                })
-                .error(function () {
-                    that.alert(options.alerts.changeVolumeError);
-                })
-                .always(function () {
-                    that.statusUpdate(false);
-                });
+                .always(function () { statusModel.update(); });
         };
 
         // リピート再生モードを切り替える
         that.repeat = function () {
             return statusModel.change("repeat", !statusModel.data.isRepeat())
-                .done(function () {
-                    that.alert(options.alerts.repeatSuccess);
-                })
-                .fail(function () {
-                    that.alert(options.alerts.repeatError);
-                })
-                .always(function () {
-                    that.statusUpdate(false);
-                })
+                .always(function () { statusModel.update(); })
         };
 
         // ランダム再生モードを切り替える
         that.random = function () {
             return statusModel.change("random", !statusModel.data.isRandom())
-                .done(function () {
-                    that.alert(options.alerts.randomSuccess);
-                })
-                .fail(function () {
-                    that.alert(options.alerts.randomError);
-                })
-                .always(function () {
-                    that.statusUpdate(false);
-                });
+                .always(function () { statusModel.update(); });
         };
 
         // 曲のチェックをON/OFFする
@@ -276,35 +187,6 @@ $(function () {
         that.currentPlaylist.subscribe(function () {
             that.allChecked(false);
         });
-
-        // アラートを追加する
-        that.alert = function (o) {
-            var obj;
-
-            if (!o) {
-                return;
-            }
-
-            obj = _.defaults(_.clone(o) || {}, {
-                title: "",
-                message: "",
-                isSuccess: false
-            });
-
-            if (_.isFunction(obj.message)) {
-                obj.message = obj.message();
-            }
-
-            that.alerts.unshift(obj);
-
-            // maxAlert以上のアラートを削除
-            that.alerts.splice(options.maxAlert);
-
-            // x秒後に自動的に削除
-            setTimeout(function () {
-                that.alerts.remove(obj);
-            }, options.waitHideAlert);
-        };
 
         /*
          * user name
@@ -365,12 +247,8 @@ $(function () {
 
             return playlistModel.create(that.newPlaylistName())
                 .done(function () {
-                    that.alert(options.alerts.createPlaylistSuccess);
                     that.update();
                     that.newPlaylistName("");
-                })
-                .fail(function () {
-                    that.alert(options.alerts.createPlaylistError);
                 });
         };
 
@@ -397,13 +275,7 @@ $(function () {
                 fd.append("file", file);
 
                 dfd.then(function () {
-                    musicModel.upload({ data: fd })
-                        .then(function () {
-                            that.alert(options.alerts.uploadMusicSuccess);
-                        }, function (xhr, thrown, status) {
-                            console.log(xhr, thrown, status);
-                            that.alert(options.alerts.uploadMusicError);
-                        })
+                    musicModel.upload({ data: fd });
                 });
             });
 
@@ -414,17 +286,10 @@ $(function () {
             return dfd;
         };
 
-        // イベントキャンセル
-        that.cancelEvent = function (obj, e) {
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        };
-
         // dropイベント
         that.dropUploadMusic = function (obj, e) {
             console.log(e.originalEvent.dataTransfer.files);
-            return that.cancelEvent(obj, e);
+            return that.cancelBubble(obj, e);
         };
 
         /*
@@ -447,11 +312,7 @@ $(function () {
         that.addMusicToPlaylist = function () {
             return playlistModel.addMusic(that.whereAddPlaylist().id, that.checkCurrentMusicIds())
                 .done(function () {
-                    that.alert(options.alerts.addMusicToPlaylistSuccess);
                     that.update();
-                })
-                .fail(function () {
-                    that.alert(options.alerts.addMusicToPlaylistError);
                 });
         };
 
@@ -463,12 +324,7 @@ $(function () {
         that.removeMusicFromPlaylist = function () {
             return playlistModel.removeMusic(that.currentPlaylist().id, that.checkCurrentMusicIds())
                 .done(function () {
-                    that.alert(options.alerts.removeMusicFromPlaylistSuccess);
                     that.update();
-                })
-                .fail(function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.removeMusicFromPlaylistError);
                 });
         };
 
@@ -480,12 +336,7 @@ $(function () {
         that.clearCurrentPlaylist = function () {
             return playlistModel.currentClear()
                 .done(function () {
-                    that.alert(options.alerts.currentPlaylistClearSuccess);
                     that.update();
-                })
-                .fail(function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.currentPlaylistClearError);
                 });
         };
 
@@ -497,13 +348,8 @@ $(function () {
         that.removePlaylist = function () {
             return playlistModel.remove(that.currentPlaylist().id)
                 .done(function () {
-                    that.alert(options.alerts.removePlaylistSuccess);
                     that.currentPlaylist(that.playlists[0]);
                     that.update();
-                })
-                .fail(function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.removePlaylistError);
                 });
         };
 
@@ -515,12 +361,7 @@ $(function () {
         that.stepForward = function () {
             return statusModel.stepForward()
                 .done(function () {
-                    that.alert(options.alerts.stepForwardSuccess);
                     that.update();
-                })
-                .error(function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.stepForwardError);
                 });
         };
 
@@ -528,12 +369,7 @@ $(function () {
         that.stepBack = function () {
             return statusModel.stepBack()
                 .done(function () {
-                    that.alert(options.alerts.stepBackSuccess);
                     that.update();
-                })
-                .fail(function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.stepBackError);
                 });
         };
 
@@ -541,12 +377,7 @@ $(function () {
         that.selectMusic = function (id) {
             return statusModel.select(id)
                 .done(function () {
-                    that.alert(options.alerts.selectMusicSuccess);
                     that.update();
-                })
-                .fail(function (x, h, r) {
-                    console.log(x, h, r);
-                    that.alert(options.alerts.selectMusicError);
                 });
         };
     };
