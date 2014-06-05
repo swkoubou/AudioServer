@@ -129,10 +129,10 @@ $(function () {
         }, {
             methodName: "uploadMusic",
             successMessage: function () {
-                return "uploaded " + vm.uploadFileName()
+                return "uploaded " + musicModel.lastUploadFileName();
             },
             errorMessage: function () {
-                return "cannot uploaded " + vm.uploadFileName() + " so cancel upload."
+                return "cannot uploaded " + musicModel.lastUploadFileName() + ", and cancel upload.";
             }
         }, {
             methodName: "addMusicToPlaylist",
