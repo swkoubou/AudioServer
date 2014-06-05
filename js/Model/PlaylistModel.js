@@ -19,12 +19,41 @@ $(function () {
             removeMusicType: "POST"
         };
 
+    /**
+     * プレイリストに関するModel
+     *
+     * @param {!Object} o
+     * @param {string} o.updateUrl
+     * @param {string} o.createUrl
+     * @param {string} o.removeUrl
+     * @param {string} o.currentClearUrl
+     * @param {string} o.addMusicUrl
+     * @param {string} o.removeMusicUrl
+     * @param {string} [o.updateType="GET"]
+     * @param {string} [o.createType="POST"]
+     * @param {string} [o.removeType="POST"]
+     * @param {string} [o.currentClearType="POST"]
+     * @param {string} [o.addMusicType="POST"]
+     * @param {string} [o.removeMusicType="POST"]
+     * @constructor
+     */
     ns.PlaylistModel = function (o) {
         var that = this,
             options = _.defaults(o || {}, defaultOptions);
 
+        /**
+         * 全てのプレイリストを持つ連想配列
+         * プレイリストIDがキーとなる
+         *
+         * @type {Object}
+         */
         that.data = ko.observable({});
 
+        /**
+         * プレイリストリストを更新する
+         *
+         * @returns {Deferred}
+         */
         that.update = function () {
             return $.ajax({
                 type: options.updateType,
@@ -59,6 +88,12 @@ $(function () {
             });
         };
 
+        /**
+         * プレイリストを作成する
+         *
+         * @param {string} name プレイリスト名
+         * @returns {Deferred}
+         */
         that.create = function (name) {
             return $.ajax({
                 type: options.createType,
@@ -68,6 +103,12 @@ $(function () {
             });
         };
 
+        /**
+         * プレイリストを削除する
+         *
+         * @param {number} playlist_id プレイリストID
+         * @returns {Deferred}
+         */
         that.remove = function (playlist_id) {
             return $.ajax({
                 type: options.removeType,
@@ -77,6 +118,11 @@ $(function () {
             });
         };
 
+        /**
+         * カレントプレイリストをクリアする
+         *
+         * @returns {Deferred}
+         */
         that.currentClear = function () {
             return $.ajax({
                 type: options.currentClearType,
@@ -85,6 +131,13 @@ $(function () {
             });
         };
 
+        /**
+         * プレイリストに曲を追加する
+         *
+         * @param playlist_id 追加先のプレイリストID
+         * @param musics_id 追加する曲ID
+         * @returns {Deferred}
+         */
         that.addMusic = function (playlist_id, musics_id) {
             return $.ajax({
                 type: options.addMusicType,
@@ -97,6 +150,13 @@ $(function () {
             });
         };
 
+        /**
+         * プレイリストから曲を削除する
+         *
+         * @param playlist_id 削除元のプレイリストID
+         * @param musics_id 削除する曲ID
+         * @returns {Deferred}
+         */
         that.removeMusic = function (playlist_id, musics_id) {
             var dfd = $.Deferred().resolve();
 

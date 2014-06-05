@@ -9,14 +9,31 @@ $(function () {
             updateType: "GET"
         };
 
+    /**
+     * ユーザに関するModel
+     *
+     * @param {!Object} o
+     * @param {string} o.updateUrl
+     * @param {string} [o.updateType="GET"]
+     * @constructor
+     */
     ns.UserModel = function (o) {
         var that = this,
             options = _.defaults(o, defaultOptions);
 
+        /**
+         * 全てのユーザを持つ連想配列
+         *
+         * @type {Object}
+         */
         that.data = ko.observable({});
 
+        /**
+         * ユーザリストを更新する
+         *
+         */
         that.update = function () {
-            $.ajax({
+           return $.ajax({
                 type: options.updateType,
                 url: options.updateUrl,
                 dataType: "json"
