@@ -107,6 +107,14 @@ $(function () {
             });
         };
 
+        /**
+         * 複数の曲を順次アップロードする
+         * 途中でエラーが発生した場合はrejectを投げる
+         *
+         * @param {string} user_name ユーザ名
+         * @param {Array.<File>} files アップロードする曲のFileオブジェクト配列
+         * @returns {Deferred}
+         */
         that.uploads = function (user_name, files) {
             var dfd = $.Deferred().resolve();
 
