@@ -140,7 +140,7 @@ $(function () {
         // 開始/停止する
         that.play = function () {
             return statusModel.change("play", !statusModel.data.isPlay())
-                .alwayzs(function () { statusModel.update(); })
+                .always(function () { statusModel.update(); })
         };
 
         // ボリュームを変更する
