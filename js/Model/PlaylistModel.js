@@ -168,7 +168,7 @@ $(function () {
                         music_id: music_id
                     }
                 }));
-            }, $.Deferred.resolve());
+            }, $.Deferred().resolve());
         };
     };
 
