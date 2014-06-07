@@ -100,7 +100,7 @@ $(function () {
             return $.ajax({
                 type: options.uploadType,
                 url: options.uploadUrl,
-                data: { data: fd },
+                data: fd,
                 dataType: "json",
                 processData: false,
                 contentType: false
@@ -116,13 +116,9 @@ $(function () {
          * @returns {Deferred}
          */
         that.uploads = function (user_name, files) {
-            var dfd = $.Deferred().resolve();
-
-            _.each(files, function (file) {
-                dfd.then(that.upload.bind(that, user_name, file));
-            });
-
-            return dfd;
+            return _.reduce(files, function (dfd, file) {
+                return dfd.then(that.upload.bind(that, user_name, file));
+            }, $.Deferred().resolve());
         };
 
         /**
