@@ -133,7 +133,8 @@ $(function () {
         that.update = function () {
             return musicModel.update()
                 .then(playlistModel.update.bind(playlistModel))
-                .then(statusModel.update.bind(statusModel));
+                .then(statusModel.update.bind(statusModel))
+                .then(userModel.update.bind(userModel));
         };
 
         // 開始/停止する
@@ -256,34 +257,12 @@ $(function () {
          * new music
          */
 
-        that.uploadFileName = ko.observable();
-
         // Musicをアップロードする
         that.uploadMusic = function (e) {
-            // FormData オブジェクトを作成
-            var fd = new FormData(),
-                files = e.file.files,
-                name = that.userName(),
-                dfd = $.Deferred().resolve();
-
-            fd.append("name", that.userName());
-
-            _.each(files, function (file) {
-                var fd = new FormData();
-                that.uploadFileName(file.name);
-                fd.append("name", name);
-                fd.append("file", file);
-
-                dfd.then(function () {
-                    musicModel.upload({ data: fd });
+            return musicModel.uploads(that.userName(), e.file.files)
+                .always(function () {
+                    $(".modal").modal('hide');
                 });
-            });
-
-            dfd.always(function () {
-                $(".modal").modal('hide');
-            });
-
-            return dfd;
         };
 
         // dropイベント

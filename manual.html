@@ -1,0 +1,99 @@
+<HTML>
+<HEAD>
+    <meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS">
+    <TITLE>ソフトウェア工房内AudioServer使用の手引き</TITLE>
+    <script type="text/javascript">
+        <!--
+
+        function showMore(id,link){
+            if(document.getElementById){
+                if(document.getElementById('more' + id).style.display){
+                    document.getElementById('more' + id).style.display='block';
+                    document.getElementById('show' + id).style.display='none';
+                    document.getElementById('hide' + id).style.display='block';
+                } else {
+                    document.location.href=link;
+                    return true;
+                }
+            } else {
+                document.location.href=link;
+                return true;
+            }
+        }
+        function hideMore(id){
+            if(document.getElementById){
+                document.getElementById('more' + id).style.display='none';
+                document.getElementById('show' + id).style.display='block';
+                document.getElementById('hide' + id).style.display='none';
+            }
+        }
+
+        //-->
+    </script>
+</HEAD>
+
+<BODY>
+    <!-- ▼冒頭部分▼ -->
+
+        <font size="30">AudioServer</font>
+        <P>工房内サーバーで構築された楽曲再生及び楽曲管理のためのサーバーです。<br>
+           工房を利用する人であれば、誰でも楽曲の再生と楽曲の追加が出来ます。</P>
+    <!-- ▲冒頭部分▲ -->
+
+<IfArticleBodyMore>
+<span class="main-continues" id="show<$ArticleId$>">
+<a class="acontinues" href="<$ArticlePermalink$>"
+   onclick="showMore('<$ArticleId$>','<$ArticlePermalink$>');return false;">
+    続きを見る
+</a>
+</span>
+
+    <div id="more<$ArticleId$>" style="display:none">
+    <!-- ▼続きの部分▼ -->
+        <h2>[目次]</H2>
+        <a href="#ad">1.アクセスの方法</a><br>
+        <a href="#saisei">2.楽曲の再生方法</a><br>
+        <a href="#tuika">3.楽曲の追加方法</a><br>
+        <br>
+        <br>
+        <div id="ad"></div>
+        <div style="border-left:8px solid darkorange; border-bottom:2px solid darkorange; padding:0px 0px 1px 5px;font-size: 1.2em;font-weight:bold;">アクセスする方法</div>
+        <p>アクセスするためにはWebブラウザを開いて「192.168.1.35」と入力し、Enterを押します
+        <br>
+        もしくは、<b>入力画面画像をクリック</b>で開きます。（工房内接続環境時に限ります)</p>
+
+        <a href="http://192.168.1.35"><img src="img\address.png" alt="error"></a>
+        <br>
+        <br>
+        アクセスに成功すると表示されます。工房内に音楽が流れていれば、左上には楽曲名が表示されていると思います。
+        <img src="img\toppage.png" alt="error">
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <div id="saisei"></div>
+        <div style="border-left:8px solid darkorange; border-bottom:2px solid darkorange; padding:0px 0px 1px 5px;font-size: 1.2em;font-weight:bold;">楽曲の再生方法</div>
+        <p>楽曲を再生するにはCurrentプレイリストを選択します。楽曲名の左にあるスピーカーマークをクリックし青くなったら再生出来ます。</p>
+        こんな感じで↓<br>
+        <img src="img\Icon1.png" alt="error">
+        <br>
+        再生中は、右上メニューをクリックしてVolumeを適宜変えて下さい。<br>
+        <font size="1">管理者注:Volumeバーではなくスピーカーで直接変更するのがオススメです。</font>
+        <br>
+        <br>
+        <br>
+
+        <!-- ▲続きの部分▲ -->
+    </div>
+
+<span class="main-continues" id="hide<$ArticleId$>" style="display:none">
+<a class="acontinues" href="#<$ArticleId$>"
+   onclick="hideMore('<$ArticleId$>');return true;">
+    続きを閉じる
+</a>
+</span>
+</IfArticleBodyMore>
+
+</BODY>
+</HTML>

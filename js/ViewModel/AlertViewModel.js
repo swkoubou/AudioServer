@@ -7,24 +7,51 @@ $(function () {
         defaultOptions = {
             maxAlertNum: 5,
             waitHideTime: 8000
-        },
-        AlertContent = function AlertContent(o) {
-            o = _.isObject(o) ? o : {};
-            this.title = o.title === undefined ? "" : o.title;
-            this.message = o.message === undefined ? "" : o.message;
-            this.isSuccess = o.isSuccess === undefined ? false : o.isSuccess
         };
 
-    ns.AlertViewModel = function (o) {
+    /**
+     * AlertViewModelが対象とするコンストラクタ関数
+     *
+     * @param {Object} [o]
+     * @param {string=} [o.title=""]
+     * @param {string=} [o.message=""]
+     * @param {boolean=} [o.isSuccess=""]
+     * @constructor
+     */
+    ns.AlertContent = function AlertContent(o) {
+        o = _.isObject(o) ? o : {};
+        this.title = o.title === undefined ? "" : o.title;
+        this.message = o.message === undefined ? "" : o.message;
+        this.isSuccess = o.isSuccess === undefined ? false : o.isSuccess
+    };
+
+    /**
+     * 自作アラートのViewModeコンストラクタ関数
+     *
+     * @param {Object} [o]
+     * @param {number=} [o.maxAlertNum=5] アラートの最大表示数
+     * @param {number=} [o.waitHideTime=8000] アラートを表示してから自動的に消えるまでの時間
+     * @constructor
+     */
+    ns.AlertViewModel = function AlertViewModel(o) {
         var that = this,
             options = _.defaults(o || {}, defaultOptions);
 
-        // アラートリスト
+        /**
+         * 有効なアラートコンテンツ
+         *
+         * @type {Array.<swkoubou.audioserver.viewmodel.AlertContent>}
+         */
         that.alerts = ko.observableArray();
 
-        // アラートを追加する
+        /**
+         * アラートコンテンツを追加する
+         *
+         * @param {swkoubou.audioserver.viewmodel.AlertContent} content
+         * @returns {swkoubou.audioserver.viewmodel.AlertViewModel}
+         */
         that.pushAlert = function (content) {
-            var obj = new AlertContent(content);
+            var obj = new ns.AlertContent(content);
 
             that.alerts.unshift(obj);
 
@@ -35,8 +62,18 @@ $(function () {
             setTimeout(function () {
                 that.alerts.remove(obj);
             }, options.waitHideTime);
+
+            return that;
         };
 
+        /**
+         * Deferredインターフェースを備えた関数に対し、後方にpushAlertを挿入しラッピングする
+         *
+         * @param {function(...): Deferred} deferred Deferredインターフェースを備えているラッピング対象の関数
+         * @param {string|function(...): Deferred=} success_message
+         * @param {string|function(...): Deferred=} error_message
+         * @returns {function(...): Deferred}}
+         */
         that.wrapDeferred = function (deferred, success_message, error_message) {
             if (!_.isFunction(deferred)) {
                 return deferred;
@@ -65,6 +102,13 @@ $(function () {
             }
         };
 
+        /**
+         * object の持つ複数の関数に対してAlertラッピングを適用する（objectに対して破壊的）
+         *
+         * @param {!Object} object
+         * @param {Array.<{methodName: string, successMessage: string|function(...): string=,
+         *     errorMessage: string|function(...): string=}>} params
+         */
         that.wrapDeferredAll = function (object, params) {
             _.each(params, function (param) {
                 if (_.isObject(param) && _.isFunction(object[param.methodName])) {
