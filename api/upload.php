@@ -5,6 +5,7 @@
 
 	// 楽曲ファイルのアップロードを行う
 	$code++;
+    json_output($_POST, 400);
 	if(!is_uploaded_file($_FILES["file"]["tmp_name"])){
 		$output = array('Code' => $code, 'Error' => 'Please upload the file');
 		json_output($output, 400);
@@ -47,11 +48,13 @@
 	
 	// musicフォルダに移動する
 	$code++;
-	if(!move_uploaded_file($file_name, "../music/".$_FILES["file"]["name"])){
+    $music_file_name = $_FILES["file"]["name"];
+    $music_file_path = "../music/".$music_file_name;
+	if(!move_uploaded_file($file_name, $music_file_path)){
 		$output = array('Code' => $code, 'Error' => 'Failed to upload');
 		json_output($output, 400);
 	}
-	chmod("../music/".$_FILES["file"]["name"], 0644);
+	chmod($music_file_path, 0644);
 	
 	// dbに登録した情報を保存する
 	// ユーザ名の処理
@@ -79,7 +82,17 @@
 	}
 	
 	// 楽曲テーブルに曲情報の追加
-	mysqli_query($db, "insert into music(name,file_name,user_id) values ('$file_name2','".$_FILES["file"]["name"]."',$user_id)");
+
+    $mp3tag_info = id3_get_tag($music_file_path);
+    $query = <<<_EOF
+insert into music(name,file_name,user_id,title,artist,album) values (
+$file_name, $music_file_name, $user_id,
+{$mp3tag_info["title"]},{$mp3tag_info["artist"]},{$mp3tag_info["album"]})
+_EOF;
+
+
+
+	mysqli_query($db, $query);
 	$code++;
 	if(!$result){
 		$output = array('Code' => $code, 'Error' => 'Insert Query Error');
