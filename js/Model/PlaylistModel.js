@@ -158,21 +158,17 @@ $(function () {
          * @returns {Deferred}
          */
         that.removeMusic = function (playlist_id, musics_id) {
-            var dfd = $.Deferred().resolve();
-
-            while (musics_id.length) {
-                dfd = dfd.then($.ajax.bind(this, {
+            return _.reduce(musics_id, function (dfd, music_id) {
+                return dfd.then($.ajax.bind(this, {
                     type: options.removeMusicType,
                     url: options.removeMusicUrl,
                     dataType: "json",
                     data: {
                         playlist_id: playlist_id,
-                        music_id: musics_id.pop()
+                        music_id: music_id
                     }
                 }));
-            }
-
-            return dfd;
+            }, $.Deferred().resolve());
         };
     };
 
