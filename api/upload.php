@@ -1,21 +1,22 @@
 <?php
 	require_once 'functions.php';
 	require_once 'db.php';
+    require_once 'MP3/Id.php';
+
 	$code = 0;
 
 	// 楽曲ファイルのアップロードを行う
 	$code++;
-    json_output($_POST, 400);
 	if(!is_uploaded_file($_FILES["file"]["tmp_name"])){
 		$output = array('Code' => $code, 'Error' => 'Please upload the file');
 		json_output($output, 400);
 	}
 
-	$_FILES["file"]["tmp_name"] = htmlspecialchars($_FILES["file"]["tmp_name"], ENT_QUOTES | ENT_NOQUOTES);
-	$_FILES["file"]["name"] = htmlspecialchars($_FILES["file"]["name"], ENT_QUOTES | ENT_NOQUOTES);
+	$_FILES["file"]["tmp_name"] = sql_escape($_FILES["file"]["tmp_name"]);
+	$_FILES["file"]["name"] = sql_escape($_FILES["file"]["name"]);
 	
 	$file_name = $_FILES["file"]["tmp_name"];
-	
+
 	$file_name_split = explode(".", $file_name);
 	$file_name2_split = explode(".",$_FILES["file"]["name"]);
 	$file_name2 = "";
@@ -25,8 +26,8 @@
 	
 	// {mp3|wma|wav|flac}じゃなかったらアップロード不可にする
 	$code++;
-        $file_type = $file_name2_split[count($file_name2_split)-1];
-        if ($file_type != "mp3" && $file_type != "wav" && $file_type != "wma" && $file_type != "flac") {
+    $file_type = $file_name2_split[count($file_name2_split)-1];
+    if ($file_type != "mp3" && $file_type != "wav" && $file_type != "wma" && $file_type != "flac") {
 		$output = array('Code' => $code, 'Error' => 'Please upload the file format {mp3|wma|wav|flac}. ');
 		json_output($output, 400);
 	}
@@ -38,18 +39,19 @@
 		$output = array('Code' => $code, 'Error' => 'Please POST your name');
 		json_output($output, 400);
 	}
+
+    $music_file_name = $_FILES["file"]["name"];
+    $music_file_path = "../music/".$music_file_name;
 	
 	// 同名のファイルが存在するかをチェック
 	$code++;
-	if(is_file("../music/".$_FILES["file"]["name"])){
+	if(is_file($music_file_path)){
 		$output = array('Code' => $code, 'Error' => 'File with the same name already exists');
 		json_output($output, 400);
 	}
 	
 	// musicフォルダに移動する
 	$code++;
-    $music_file_name = $_FILES["file"]["name"];
-    $music_file_path = "../music/".$music_file_name;
 	if(!move_uploaded_file($file_name, $music_file_path)){
 		$output = array('Code' => $code, 'Error' => 'Failed to upload');
 		json_output($output, 400);
@@ -83,19 +85,30 @@
 	
 	// 楽曲テーブルに曲情報の追加
 
-    $mp3tag_info = id3_get_tag($music_file_path);
-    $query = <<<_EOF
-insert into music(name,file_name,user_id,title,artist,album) values (
-$file_name, $music_file_name, $user_id,
-{$mp3tag_info["title"]},{$mp3tag_info["artist"]},{$mp3tag_info["album"]})
+//    $mp3tag_info = id3_get_tag($music_file_path);
+
+    if($file_type != "mp3"){//mp3以外
+        $query = <<<_EOF
+insert into music(name,file_name,user_id) values (
+'$file_name2', '$music_file_name', '$user_id')
 _EOF;
+    }else{//mp3
+        $mp3tag_info = new MP3_Id();
+        $mp3tag_info->read($music_file_path);
+        $mp3_title = sql_escape($mp3tag_info->getTag("title"));
+        $mp3_artist = sql_escape($mp3tag_info->getTag("artists"));
+        $mp3_album = sql_escape($mp3tag_info->getTag("album"));
+        $query = <<<_EOF
+insert into music(name,file_name,user_id,title,artist,album) values (
+'$file_name', '$music_file_name', '$user_id', '$mp3_title','$mp3_artist', '$mp3_album')
+_EOF;
+    }
 
-
-
-	mysqli_query($db, $query);
+    $result = mysqli_query($db, $query);
 	$code++;
 	if(!$result){
-		$output = array('Code' => $code, 'Error' => 'Insert Query Error');
+        echo mysqli_error($db);
+		$output = array('Code' => $code, 'Error' => 'Insert Query Error: '. mysqli_error($db));
 		json_output($output, 400);
 	}
 	

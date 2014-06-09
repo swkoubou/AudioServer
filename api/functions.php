@@ -11,3 +11,7 @@
 		echo json_encode($output_data,JSON_NUMERIC_CHECK);
 		exit;
 	}
+
+    function sql_escape($data){
+        return htmlspecialchars($data, ENT_QUOTES | ENT_NOQUOTES);
+    }

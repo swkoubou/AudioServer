@@ -1,7 +1,8 @@
+<!doctype html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>sample</title>
+    <meta charset="utf-8">
+<title>upload test</title>
 </head>
 <body>
 <h4 class="modal-title" id="myModalLabel">Upload Music</h4>
@@ -9,8 +10,9 @@
 
                 <label class="control-label">User name</label>
                 <input type="file" name="file" multiple="multiple" data-bind="">
-            <button type="submit" class="btn btn-primary col-xs-5 pull-right"
-                    data-bind="css: { disabled: !validationUserName() }">Upload</button>
+                <input type="hidden" name="name" value="xyz" />
+            <input type="submit" value="Upload" class="btn btn-primary col-xs-5 pull-right"
+                    data-bind="css: { disabled: !validationUserName() }" />
     </form>
 </body>
 </html>
