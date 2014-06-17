@@ -5,7 +5,7 @@ $(function () {
 
     var model = util.namespace("swkoubou.audioserver.model"),
         viewmodel = util.namespace("swkoubou.audioserver.viewmodel"),
-        test = true, // trueのときはstubApiを叩く (また、そのようにコーディングする）
+        test = false, // trueのときはstubApiを叩く (また、そのようにコーディングする）
         musicModel = new model.MusicModel({
             updateUrl: "api/musiclist.php",
             uploadUrl: "api/upload.php",
