@@ -55,6 +55,8 @@ $(function () {
                 url: options.updateUrl,
                 dataType: "json"
             }).then(function (data, status, xhr) {
+                var dirty = false;
+
                 _.each(data, function (x) {
                     x.name = util.htmlspecialchars_decode(x.name);
                 });
@@ -72,15 +74,18 @@ $(function () {
 
                 // 旧データにない新しいデータは挿入
                 _.chain(data).omit(_.keys(oldData)).each(function (v, k) {
+                    dirty |= true;
                     newData[k] = {
                         id: v.id,
                         name: ko.observable(v.name),
                         data: ko.observable(v.data)
                     }
                 });
-
-                // 更新
-                that.data(newData);
+                
+                // 更新 余計な更新をかけないようにdirtyフラグで管理
+                if (dirty) {
+                    that.data(newData);
+                }
             });
         };
 
