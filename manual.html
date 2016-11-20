@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<HTML lang="ja">
+<HEAD>
+    <meta charset="UTF-8">
+    <link href="plugin/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <TITLE> How to use AudioServer</TITLE>
+</HEAD>
+<BODY>
+    <header>
+    <h1>ソフトウェア工房内AudioServerの利用者向けマニュアル</h1>
+    </header>
+    <div id="container">
+    <p>工房内サーバーで構築された楽曲再生及び楽曲管理のためのサーバーです。</p>
+    <p>工房を利用する人・工房回線にアクセス可能な者<i class="authority">[要出典]</i>であれば、誰でも楽曲の再生と楽曲の追加が出来ます。</p>
+    <p>なお、<a href="#menseki">免責事項</a>にも書いていますが、<b>InternetExplorerでの閲覧は非推奨です。他ブラウザでAudioServerをご利用下さい。</b></p>
+    <h2>目次</h2>
+    <ul>
+        <li>
+            <a href="#ad">AudioServerへアクセスする方法</a>
+        </li>
+        <li>
+            <a href="#menu">メニューの簡略説明</a>
+        </li>
+        <li>
+            <a href="#saisei">楽曲を再生する方法</a>
+        </li>
+        <li>
+            <a href="#tuika">楽曲を追加する方法</a>
+        </li>
+        <li>
+            <a href="#menseki">免責事項</a>
+        </li>
+    </ul>
+    <section id="ad">
+        <h2>AudioServerへアクセスする方法</h2>
+        <p>アクセスするためにはWebブラウザを開いて「<b class="ip">192.168.1.35</b>」と入力し、Enterを押します。もしくは、
+        <b>入力画面画像をクリック</b>で開きます。<br>（下画像は工房内接続環境時に限ります)
+        </p>
+        <a href="http://192.168.1.35">
+            <img src="img/address.png" alt="ip" title="クリック！">
+        </a>
+        <p>アクセスに成功するとcurrentプレイリストが表示されます。工房内に音楽が流れていれば、
+        左上には楽曲名が表示されていると思います。</p>
+        <img src="img/toppage.png" width="800" height="550" alt="top" title="トップページ">
+    </section>
+    <section id="menu">
+        <h2>メニューのかんたんなせつめいだよ</h2>
+        <img src="img/menu.png" alt="menu" title="メニュー"><br>
+        <h3>上メニュー</h3>
+        <span class="glyphicon glyphicon-play"> 再生ボタン</span><br>
+        <span class="glyphicon glyphicon-pause"> 停止ボタン</span><br>
+        <span class="glyphicon glyphicon-step-backward"> 前の楽曲を再生</span><br>
+        <span class="glyphicon glyphicon-step-forward"> 次の楽曲を再生</span><br>
+        <span class="glyphicon glyphicon-repeat"> Currentプレイリストをリピートで再生している状態表示</span><br>
+        <span class="glyphicon glyphicon-random"> Currentプレイリストをランダムで再生している状態表示</span><br>
+        <span class="glyphicon glyphicon-arrow-right"> リピート再生・ランダム再生がされていない状態表示</span><br>
+        <p>（真ん中はボリュームバー）
+        </p>
+        <h3>下メニュー</h3>
+        <span class="glyphicon glyphicon-music"> 新しいプレイリストの作成</span><br>
+        <span class="glyphicon glyphicon-trash"> プレイリストを削除</span><br>
+        <span class="glyphicon glyphicon-plus"> プレイリストに楽曲を追加</span><br>
+        <span class="glyphicon glyphicon-minus"> プレイリストから楽曲を削除</span><br>
+        <span class="glyphicon glyphicon-open"> 楽曲をアップロード</span><br>
+
+
+
+
+
+    </section>
+    <section id="saisei">
+    <h2>楽曲を再生する方法</h2>
+    <p>楽曲を再生するにはCurrentプレイリストを選択します。
+    楽曲名の左にある<span class="glyphicon glyphicon-volume-down"></span>をクリックすれば再生出来ます。
+    再生中は<span style="color: deepskyblue" class="glyphicon glyphicon-volume-up"></span>で表示されます。
+    </p>
+    <p>または、メニューを開き、<span  class="glyphicon glyphicon-play"></span> をクリックする事で
+        <i class="cs">Currentプレイリスト内を再生していきます。</i><br><b>再生したい楽曲はCurrentプレイリストに入れる必要がある事に注意してください。</b>
+    </p>
+    <p>再生中は、右上メニューをクリックしてVolumeを適宜変えて下さい。</p>
+    <div>igariさんの話
+        <blockquote>
+            <p>Volumeバーはちょっと表示がおかしいというかバグっているので<br>
+            音量の調整はバーではなく電子レンジ上のスピーカーのツマミを直接動かすのがオススメ
+            </p>
+        </blockquote>
+    とのこと。</div>
+    </section>
+    <section id="tuika">
+        <h2>楽曲を追加する方法</h2>
+        <p>楽曲を追加するにはメニューよりUploadを選択し、UploadUserを選択、または作成します。</p>
+        <img src="img/uploadmenu.png" alt="upload" title="アップロード画面">
+        <p>楽曲をアップロードするのに成功すると、Allプレイリストの一番下に追加されてると思います。
+            適宜、自分でプレイリストを作成してください。<br>名前などは分かりやすい物がオススメです。
+        </p>
+    </section>
+    <section id="menseki">
+        <h2>免責事項</h2>
+        <ul>
+            <li>
+            AudioServerはInternetExplorerでの利用を非推奨としています。他ブラウザをご利用下さい。
+            </li>
+            <li>
+            AudioServerはモラルとマナーを守って利用しましょう。
+            </li>
+            <li>
+            AudioServer利用によるブラウザの不具合は各自で解決させてください。
+            </li>
+            <li>
+            不具合や要望はGitHubのIssueに投稿してください。GitHub公式サイトは<A Href="https://github.com/">こちら</A>
+            </li>
+        </ul>
+    </section>
+    </div>
+    <footer>
+        Copyright &copy; ソフトウェア工房 2013-2014 Software Studio.Kanagawa Institute of Technology.
+    </footer>
+    <script src="plugin/bootstrap/js/bootstrap.min.js"></script>
+</BODY>
+</HTML>
